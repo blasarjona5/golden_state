@@ -1,0 +1,216 @@
+{% extends 'propiedades/base.html' %}
+{% load static %}
+
+{% block title %}Propiedades | Golden State Luxury Real Estate{% endblock %}
+
+{% block extra_css %}
+    <!-- 🎨 El CSS exclusivo de tu catálogo -->
+    <link rel="stylesheet" href="{% static 'propiedades/css/catalogo.css' %}" />
+{% endblock %}
+
+{% block content %}
+    <!-- 🔍 1. Barra de Filtros Dinámica -->
+    <div class="filter-bar py-4 px-5 sm:px-8">
+        <form method="GET" action="{% url 'propiedades:catalogo' %}" class="max-w-7xl mx-auto">
+            <div class="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center">
+                <div class="flex-1 min-w-0">
+                    <select name="operacion" class="filter-select">
+                        <option value="">Operación (Todas)</option>
+                        <option value="alquiler" {% if request.GET.operacion == 'alquiler' %}selected{% endif %}>En Alquiler</option>
+                        <option value="venta" {% if request.GET.operacion == 'venta' %}selected{% endif %}>En Venta</option>
+                        <option value="alquiler_temporal" {% if request.GET.operacion == 'alquiler_temporal' %}selected{% endif %}>Alquiler Temporal</option>
+                    </select>
+                </div>
+                <div class="flex-1 min-w-0">
+                    <select name="tipo" class="filter-select">
+                        <option value="">Tipo (Todos)</option>
+                        <option value="casa" {% if request.GET.tipo == 'casa' %}selected{% endif %}>Casa</option>
+                        <option value="departamento" {% if request.GET.tipo == 'departamento' %}selected{% endif %}>Departamento</option>
+                        <option value="monoambiente" {% if request.GET.tipo == 'monoambiente' %}selected{% endif %}>Monoambiente</option>
+                        <option value="ph" {% if request.GET.tipo == 'ph' %}selected{% endif %}>PH</option>
+                        <option value="quinta" {% if request.GET.tipo == 'quinta' %}selected{% endif %}>Quinta / Barrio Cerrado</option>
+                        <option value="loft" {% if request.GET.tipo == 'loft' %}selected{% endif %}>Loft</option>
+                        <option value="local" {% if request.GET.tipo == 'local' %}selected{% endif %}>Local Comercial</option>
+                        <option value="oficina" {% if request.GET.tipo == 'oficina' %}selected{% endif %}>Oficina</option>
+                    </select>
+                </div>
+                <div class="flex-1 min-w-0">
+                    <input type="text" name="barrio" value="{{ request.GET.barrio|default:'' }}" placeholder="Barrio o localidad…" class="filter-input">
+                </div>
+                <button type="submit" class="filter-btn">Filtrar</button>
+                {% if request.GET.operacion or request.GET.tipo or request.GET.barrio %}
+                    <a href="{% url 'propiedades:catalogo' %}" class="clear-btn">Limpiar</a>
+                {% endif %}
+            </div>
+        </form>
+    </div>
+
+    <!-- 🏛️ 2. Cuerpo del Catálogo -->
+    <main class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 py-12 pb-20">
+
+        <!-- Encabezados dinámicos de resultados -->
+        <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-5 mb-10 reveal visible">
+            <div>
+                <p class="section-eyebrow mb-2">
+                    {% if request.GET.operacion or request.GET.tipo or request.GET.barrio %}
+                        Resultados de búsqueda
+                    {% else %}
+                        Colección completa
+                    {% endif %}
+                </p>
+                <h1 class="section-title">
+                    {% if request.GET.operacion or request.GET.tipo or request.GET.barrio %}
+                        Propiedades<em style="font-style:italic;"> encontradas</em>
+                    {% else %}
+                        Todas las Propiedades
+                    {% endif %}
+                </h1>
+            </div>
+            <div class="flex items-center gap-4">
+                <p class="result-count">
+                    {% if propiedades %}
+                        <strong>{{ propiedades|length }}</strong> propiedad{{ propiedades|length|pluralize:"es" }}
+                    {% endif %}
+                </p>
+                <div class="flex gap-1" id="view-toggle">
+                    <button class="view-btn active" id="btn-grid" title="Vista en grilla" onclick="setView('grid')">
+                        <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16"><path d="M1 2.5A1.5 1.5 0 0 1 2.5 1h3A1.5 1.5 0 0 1 7 2.5v3A1.5 1.5 0 0 1 5.5 7h-3A1.5 1.5 0 0 1 1 5.5v-3zm8 0A1.5 1.5 0 0 1 10.5 1h3A1.5 1.5 0 0 1 15 2.5v3A1.5 1.5 0 0 1 13.5 7h-3A1.5 1.5 0 0 1 9 5.5v-3zm-8 8A1.5 1.5 0 0 1 2.5 9h3A1.5 1.5 0 0 1 7 10.5v3A1.5 1.5 0 0 1 5.5 15h-3A1.5 1.5 0 0 1 1 13.5v-3zm8 0A1.5 1.5 0 0 1 10.5 9h3a1.5 1.5 0 0 1 1.5 1.5v3a1.5 1.5 0 0 1-1.5 1.5h-3A1.5 1.5 0 0 1 9 13.5v-3z"/></svg>
+                    </button>
+                    <button class="view-btn" id="btn-list" title="Vista en lista" onclick="setView('list')">
+                        <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Píldoras de filtros activos -->
+        {% if request.GET.operacion or request.GET.tipo or request.GET.barrio %}
+        <div class="flex flex-wrap gap-2 mb-8 reveal visible">
+            {% if request.GET.operacion %}
+                <span class="filter-pill">
+                    <svg width="10" height="10" fill="currentColor" viewBox="0 0 16 16" class="inline mr-1"><path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/></svg>
+                    {{ request.GET.operacion }}
+                </span>
+            {% endif %}
+            {% if request.GET.tipo %}
+                <span class="filter-pill">{{ request.GET.tipo }}</span>
+            {% endif %}
+            {% if request.GET.barrio %}
+                <span class="filter-pill">📍 {{ request.GET.barrio }}</span>
+            {% endif %}
+        </div>
+        {% endif %}
+
+        {% if propiedades %}
+            <!-- 🎴 MODO LISTADO 1: Vista en Grilla -->
+            <div id="view-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7">
+                {% for propiedad in propiedades %}
+                <article class="prop-card reveal visible" style="transition-delay: {{ forloop.counter0|default:'0' }}00ms;">
+                    <div class="img-wrap relative" style="height:240px;background:var(--charcoal);">
+                        {% if propiedad.imagen_principal %}
+                            <img src="{{ propiedad.imagen_principal.url }}" alt="{{ propiedad.titulo }}">
+                        {% else %}
+                            <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:var(--fog);">
+                                <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="0.8" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="1"/><path d="M3 15l5-5 4 4 3-3 4 4"/><circle cx="8.5" cy="8.5" r="1.5"/></svg>
+                            </div>
+                        {% endif %}
+                        <div style="position:absolute;inset:0;background:linear-gradient(180deg,transparent 45%,rgba(10,10,11,0.6) 100%);pointer-events:none;"></div>
+                        <span class="badge-op" style="position:absolute;top:12px;left:12px;">{{ propiedad.get_tipo_operacion_display }}</span>
+                        {% if propiedad.destacada %}
+                            <span style="position:absolute;top:12px;right:12px;font-size:0.55rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);background:rgba(201,168,76,0.12);border:1px solid rgba(201,168,76,0.25);padding:0.25rem 0.6rem;font-family:'Jost',sans-serif;font-weight:500;">Destacada</span>
+                        {% endif %}
+                    </div>
+                    <div class="p-5">
+                        <div class="price-tag mb-1">{{ propiedad.precio_formateado }}</div>
+                        {% if propiedad.expensas > 0 %}
+                            <p style="font-size:0.67rem;color:var(--fog);letter-spacing:0.05em;margin-bottom:0.6rem;">+ {{ propiedad.expensas }} expensas</p>
+                        {% endif %}
+                        <h2 class="text-white font-medium leading-snug mb-1" style="font-size:0.9rem;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;">{{ propiedad.titulo }}</h2>
+                        <p style="font-size:0.72rem;color:var(--mist);margin-bottom:1rem;">📍 {{ propiedad.barrio_localidad }}</p>
+                        <div class="stat-pill flex items-center justify-between py-3" style="border-top:1px solid rgba(201,168,76,0.08);border-bottom:1px solid rgba(201,168,76,0.08);margin-bottom:1rem;">
+                            <span>🚪 <strong>{{ propiedad.ambientes }}</strong> Amb.</span>
+                            <span>🛏 <strong>{{ propiedad.dormitorios }}</strong> Dorm.</span>
+                            <span>📐 <strong>{{ propiedad.metros_totales }}</strong> m²</span>
+                        </div>
+                        <a href="{% url 'propiedades:detalle' propiedad.pk %}" class="card-cta">Ver ficha</a>
+                    </div>
+                </article>
+                {% endfor %}
+            </div>
+
+            <!-- 📇 MODO LISTADO 2: Vista en Lista (Oculta por defecto) -->
+            <div id="view-list" class="hidden space-y-4">
+                {% for propiedad in propiedades %}
+                <article class="prop-card-list reveal visible">
+                    <div class="flex flex-col sm:flex-row">
+                        <div style="flex-shrink:0;width:100%;max-width:280px;height:180px;overflow:hidden;background:var(--charcoal);position:relative;">
+                            {% if propiedad.imagen_principal %}
+                                <img src="{{ propiedad.imagen_principal.url }}" alt="{{ propiedad.titulo }}">
+                            {% else %}
+                                <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:var(--fog);">
+                                    <svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="0.8" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="1"/><path d="M3 15l5-5 4 4 3-3 4 4"/></svg>
+                                </div>
+                            {% endif %}
+                            <span class="badge-op" style="position:absolute;top:10px;left:10px;">{{ propiedad.get_tipo_operacion_display }}</span>
+                        </div>
+                        <div style="padding:1.5rem;flex:1;display:flex;flex-direction:column;justify-content:space-between;">
+                            <div>
+                                <div class="price-tag mb-1">{{ propiedad.precio_formateado }}</div>
+                                <h2 class="text-white font-medium mb-1" style="font-size:1rem;">{{ propiedad.titulo }}</h2>
+                                <p style="font-size:0.75rem;color:var(--mist);margin-bottom:0.75rem;">📍 {{ propiedad.direccion }}, {{ propiedad.barrio_localidad }}, {{ propiedad.provincia }}</p>
+                                <div class="stat-pill flex flex-wrap gap-4" style="font-size:0.72rem;">
+                                    <span>🚪 <strong>{{ propiedad.ambientes }}</strong> Amb.</span>
+                                    <span>🛏 <strong>{{ propiedad.dormitorios }}</strong> Dorm.</span>
+                                    <span>🚿 <strong>{{ propiedad.banos }}</strong> Baños</span>
+                                    <span>📐 <strong>{{ propiedad.metros_totales }}</strong> m²</span>
+                                    {% if propiedad.metros_cubiertos %}<span>🏠 <strong>{{ propiedad.metros_cubiertos }}</strong> m² cub.</span>{% endif %}
+                                </div>
+                            </div>
+                            <div style="margin-top:1rem;">
+                                <a href="{% url 'propiedades:detalle' propiedad.pk %}" class="card-cta" style="max-width:180px;">Ver ficha completa →</a>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+                {% endfor %}
+            </div>
+
+            <!-- 🔢 Paginador -->
+            {% if is_paginated %}
+            <div class="flex items-center justify-center gap-2 mt-14 reveal visible">
+                {% if page_obj.has_previous %}
+                    <a href="?page={{ page_obj.previous_page_number }}{% if request.GET.operacion %}&operacion={{ request.GET.operacion }}{% endif %}{% if request.GET.tipo %}&tipo={{ request.GET.tipo }}{% endif %}{% if request.GET.barrio %}&barrio={{ request.GET.barrio }}{% endif %}" class="page-btn">
+                        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+                    </a>
+                {% endif %}
+                {% for num in page_obj.paginator.page_range %}
+                    {% if page_obj.number == num %}
+                        <span class="page-btn active">{{ num }}</span>
+                    {% elif num > page_obj.number|add:-3 and num < page_obj.number|add:3 %}
+                        <a href="?page={{ num }}{% if request.GET.operacion %}&operacion={{ request.GET.operacion }}{% endif %}{% if request.GET.tipo %}&tipo={{ request.GET.tipo }}{% endif %}{% if request.GET.barrio %}&barrio={{ request.GET.barrio }}{% endif %}" class="page-btn">{{ num }}</a>
+                    {% endif %}
+                {% endfor %}
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}{% if request.GET.operacion %}&operacion={{ request.GET.operacion }}{% endif %}{% if request.GET.tipo %}&tipo={{ request.GET.tipo }}{% endif %}{% if request.GET.barrio %}&barrio={{ request.GET.barrio }}{% endif %}" class="page-btn">
+                        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+                    </a>
+                {% endif %}
+            </div>
+            {% endif %}
+
+        {% else %}
+            <!-- 📭 Empty State -->
+            <div class="empty-state text-center py-24 px-6 max-w-sm mx-auto reveal visible">
+                <svg class="mx-auto mb-5 opacity-20" width="44" height="44" fill="none" stroke="#C9A84C" stroke-width="0.8" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+                <p style="font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:300;color:#F0EDE8;margin-bottom:0.5rem;">Sin resultados</p>
+                <p style="font-size:0.78rem;line-height:1.7;color:var(--fog);">No se encontraron propiedades con los filtros aplicados. Intentá con otros criterios.</p>
+                <a href="{% url 'propiedades:catalogo' %}" style="display:inline-block;margin-top:1.5rem;font-size:0.68rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);border:1px solid rgba(201,168,76,0.2);padding:0.7rem 1.5rem;text-decoration:none;transition:background 0.2s,color 0.2s;" onmouseover="this.style.background='var(--gold)';this.style.color='var(--obsidian)';" onmouseout="this.style.background='';this.style.color='var(--gold)';">Ver todas las propiedades</a>
+            </div>
+        {% endif %}
+    </main>
+{% endblock %}
+
+{% block extra_js %}
+    <!-- ⚡ Tu JavaScript del catálogo -->
+    <script src="{% static 'propiedades/js/catalogo.js' %}"></script>
+{% endblock %}

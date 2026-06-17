@@ -1,0 +1,181 @@
+{% extends 'propiedades/base.html' %}
+{% load static %}
+
+{% block title %}Contacto Privado | Golden State Office{% endblock %}
+
+{% block extra_css %}
+    <!-- 🎨 Inyección del CSS modular -->
+    <link rel="stylesheet" href="{% static 'propiedades/css/contacto.css' %}" />
+{% endblock %}
+
+{% block content %}
+<!-- 🌌 FONDO ESCÉNICO CON GRADIENTE DE LUZ -->
+<div class="relative w-full overflow-hidden bg-[#0A0A0B] text-white py-16 lg:py-24 font-luxury-body">
+    
+    <!-- Efectos ambientales de fondo -->
+    <div class="absolute top-[-10%] right-[-10%] w-[600px] h-[600px] bg-[#C9A84C]/5 rounded-full blur-[140px] pointer-events-none"></div>
+    <div class="absolute bottom-[-10%] left-[-10%] w-[500px] h-[500px] bg-[#9A7535]/3 rounded-full blur-[120px] pointer-events-none"></div>
+
+    <div class="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 relative z-10">
+        
+        <!-- 🎭 ENCABEZADO CINEMATOGRÁFICO -->
+        <div class="max-w-3xl mb-20">
+            <p class="text-[10px] uppercase tracking-[0.4em] text-[#C9A84C] mb-4 font-semibold">Concierge & Private Office</p>
+            <h1 class="font-luxury-title text-5xl sm:text-6xl lg:text-7xl font-light leading-[1.05] tracking-tight text-white mb-6">
+                Comience su próximo <br><span class="text-gold-gradient italic font-normal">capítulo de distinción</span>
+            </h1>
+            <p class="text-neutral-400 text-base sm:text-lg max-w-xl font-light leading-relaxed">
+                Ya sea para adquirir una residencia de diseño o expandir su portafolio corporativo, nuestro equipo global procesará su solicitud bajo estrictos estándares de confidencialidad.
+            </p>
+        </div>
+
+        <!-- 🏢 SECCIÓN PRINCIPAL: ASIMÉTRICA PREMIUM -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start mb-24">
+            
+            <!-- FORMULARIO DE ALTA GAMA -->
+            <div class="lg:col-span-7 card-luxury p-8 sm:p-12 lg:p-16 relative">
+                <div class="absolute top-0 left-0 w-6 h-[1px] bg-[#C9A84C]/30"></div>
+                <div class="absolute top-0 left-0 w-[1px] h-6 bg-[#C9A84C]/30"></div>
+
+                <h2 class="font-luxury-title text-3xl font-light mb-10 text-neutral-100">Solicitud de Consulta</h2>
+                
+                <!-- 🔔 BLOQUE DE NOTIFICACIONES DE DJANGO -->
+                {% if messages %}
+                    <div class="mb-6 space-y-3">
+                        {% for message in messages %}
+                            <div class="p-4 text-xs tracking-wider uppercase rounded-sm border {% if message.tags == 'success' %}bg-emerald-950/40 border-emerald-500/30 text-emerald-400{% else %}bg-rose-950/40 border-rose-500/30 text-rose-400{% endif %}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                
+                <!-- 🔌 FORMULARIO CONECTADO CON EL BACKEND -->
+                <form method="POST" action="{% url 'propiedades:contacto' %}" class="space-y-8">
+                    {% csrf_token %}
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                        <div class="relative">
+                            <input type="text" name="nombre" id="nombre" required class="w-full input-luxury text-sm focus:outline-none" placeholder=" ">
+                            <label for="nombre" class="absolute left-0 text-xs uppercase tracking-widest text-neutral-500 pointer-events-none origin-left">Su Nombre </label>
+                        </div>
+                        <div class="relative">
+                            <input type="email" name="email" id="email" required class="w-full input-luxury text-sm focus:outline-none" placeholder=" ">
+                            <label for="email" class="absolute left-0 text-xs uppercase tracking-widest text-neutral-500 pointer-events-none origin-left">Dirección de Email </label>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                        <div class="relative">
+                            <input type="tel" name="telefono" id="telefono" class="w-full input-luxury text-sm focus:outline-none" placeholder=" ">
+                            <label for="telefono" class="absolute left-0 text-xs uppercase tracking-widest text-neutral-400 pointer-events-none origin-left">Teléfono / WhatsApp (Opcional)</label>
+                        </div>
+                        <div class="relative mt-[1.25rem]">
+                            <select name="interes" required class="w-full input-luxury text-sm focus:outline-none text-neutral-400">
+                                <option value="" disabled selected hidden>Tipo de Inversión...</option>
+                                <option value="adquisicion" class="bg-[#0A0A0B]">Adquisición Residencial Premium</option>
+                                <option value="corporativo" class="bg-[#0A0A0B]">Búsqueda Corporativa / Comercial</option>
+                                <option value="tasacion" class="bg-[#0A0A0B]">Tasación de Portafolio</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="relative pt-2">
+                        <textarea name="mensaje" id="mensaje" rows="4" required class="w-full input-luxury text-sm focus:outline-none resize-none" placeholder=" "></textarea>
+                        <label for="mensaje" class="absolute left-0 text-xs uppercase tracking-widest text-neutral-500 pointer-events-none origin-left">Detalles de su requerimiento inmobiliario</label>
+                    </div>
+                    
+                    <div class="pt-4">
+                        <button type="submit" class="group relative w-full sm:w-auto inline-flex items-center justify-center overflow-hidden border border-[#C9A84C]/40 bg-transparent px-8 py-4 text-xs font-medium uppercase tracking-[0.2em] text-[#F3E7C4] transition-all duration-300 hover:border-[#C9A84C]">
+                            <span class="absolute inset-0 translate-y-full bg-gradient-to-r from-[#C9A84C] to-[#9A7535] transition-transform duration-500 cubic-bezier(0.25, 1, 0.5, 1) group-hover:translate-y-0"></span>
+                            <span class="relative z-10 transition-colors duration-300 group-hover:text-[#0A0A0B] flex items-center gap-2">
+                                Enviar Solicitud Segura 
+                                <span class="transform transition-transform duration-300 group-hover:translate-x-1">→</span>
+                            </span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- INFO CORPORATIVA DE SOPORTE -->
+            <div class="lg:col-span-5 space-y-8 lg:pl-4">
+                <div class="card-luxury p-8 relative overflow-hidden">
+                    <div class="absolute right-4 bottom-4 text-[7rem] font-light font-luxury-title text-white/[0.02] select-none pointer-events-none">GS</div>
+                    <h3 class="font-luxury-title text-xl text-white font-light mb-4">Oficina</h3>
+                    <div class="space-y-3 text-sm font-light text-neutral-400 border-b border-white/5 pb-6">
+                        <p class="flex items-center gap-3"><span class="text-[#C9A84C] text-xs">🏢</span> San Lorenzo Chico Edificio Porto 2do piso oficina 206</p>
+                        <p class="flex items-center gap-3"><span class="text-[#C9A84C] text-xs">📞</span> +5493874209690</p>
+                        <p class="flex items-center gap-3"><span class="text-[#C9A84C] text-xs">✉️</span> gustavo18iba@gmail.com</p>
+                    </div>
+
+                    <!-- 🌐 SUBSECCIÓN: CANALES OFICIALES DIGITALES (Tus links reales agregados) -->
+                    <div class="pt-6">
+                        <h4 class="text-[10px] uppercase tracking-[0.2em] text-neutral-500 font-semibold mb-4">Canales Oficiales</h4>
+                        <div class="flex flex-col gap-3 text-xs tracking-wider uppercase font-medium" style="font-family: 'Jost', sans-serif;">
+                            <a href="https://www.instagram.com/goldstate_bienesraices/" target="_blank" rel="noopener" class="flex items-center gap-3 text-neutral-400 hover:text-[#C9A84C] transition-colors duration-300">
+                                <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+                                Instagram <span class="text-[10px] text-neutral-600 font-light lowercase">@goldstate_bienesraices</span>
+                            </a>
+                            <a href="https://www.facebook.com/share/1biLLeTB7m/" target="_blank" rel="noopener" class="flex items-center gap-3 text-neutral-400 hover:text-[#C9A84C] transition-colors duration-300">
+                                <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+                                Facebook <span class="text-[10px] text-neutral-600 font-light lowercase">/goldstate_bienesraices</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-8 border border-dashed border-[#C9A84C]/20 bg-[#121214]/40 rounded-sm">
+                    <div class="flex gap-4 items-start">
+                        <span class="text-xl text-[#C9A84C] mt-0.5">🔒</span>
+                        <div>
+                            <h4 class="text-xs uppercase tracking-widest text-[#F3E7C4] font-semibold mb-2">Protocolo de Privacidad Certificado</h4>
+                            <p class="text-neutral-500 text-xs leading-relaxed font-light">
+                                Toda la información suministrada a través de este canal digital es encriptada de punta a punta y gestionada exclusivamente por la dirección general de la firma. No compartimos sus datos con bases de terceros.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 👥 THE PARTNERS / AGENTES EXCLUSIVOS -->
+        <div class="border-t border-white/5 pt-20">
+            <div class="mb-12">
+                <p class="text-[10px] uppercase tracking-[0.3em] text-neutral-500 mb-2">Asesoramiento Directo</p>
+                <h3 class="font-luxury-title text-3xl font-light text-white">Directores de <span class="italic text-[#C9A84C]">División</span></h3>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                <div class="card-luxury p-6 flex items-center gap-5">
+                    <div class="w-16 h-16 rounded-full bg-neutral-800 border border-[#C9A84C]/20 flex-shrink-0 overflow-hidden flex items-center justify-center">
+                        <span class="font-luxury-title text-xl text-[#C9A84C] font-light">GI</span>
+                    </div>
+                    <div>
+                        <h4 class="text-white font-medium text-sm">Gustavo Ibañez</h4>
+                        <p class="text-xs text-neutral-500 mt-0.5">Founder Gold States</p>
+                        <a href="https://wa.me/5493874209690" target="_blank" class="inline-block text-[10px] uppercase tracking-widest text-[#C9A84C] hover:text-white mt-2 transition">Asesoría Directa →</a>
+                    </div>
+                </div>
+
+                <div class="card-luxury p-6 flex items-center gap-5">
+                    <div class="w-16 h-16 rounded-full bg-neutral-800 border border-[#C9A84C]/20 flex-shrink-0 overflow-hidden flex items-center justify-center">
+                        <span class="font-luxury-title text-xl text-[#C9A84C] font-light">NG</span>
+                    </div>
+                    <div>
+                        <h4 class="text-white font-medium text-sm">Nicolas Gutierrez</h4>
+                        <p class="text-xs text-neutral-500 mt-0.5">CEO Gold States</p>
+                        <a href="https://wa.me/5493875803646" target="_blank" class="inline-block text-[10px] uppercase tracking-widest text-[#C9A84C] hover:text-white mt-2 transition">Asesoría Directa →</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+    <!-- ⚡ Inyección de la lógica JS modular -->
+    <script src="{% static 'propiedades/js/contacto.js' %}"></script>
+{% endblock %}

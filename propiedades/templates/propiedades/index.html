@@ -1,0 +1,259 @@
+{% extends 'propiedades/base.html' %}
+{% load static %}
+
+{% block title %}Golden State | Propiedades Exclusivas{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'propiedades/css/index.css' %}" />
+{% endblock %}
+
+
+{% block content %}
+    <section class="hero-section relative pt-24 pb-20 px-5 sm:px-8 overflow-hidden bg-cover bg-fixed bg-center bg-no-repeat">
+        <div class="max-w-4xl mx-auto text-center relative z-10">
+            <p class="section-eyebrow mb-5">Colección Privada · 2026</p>
+            <div class="gold-rule-center mb-6"></div>
+            <h1 class="font-display text-white mb-3" style="font-family:'Cormorant Garamond',serif; font-weight:300; font-size:clamp(2.4rem,6vw,4rem); line-height:1.1; letter-spacing:0.02em;">
+                Propiedades de<br><em style="font-style:italic; color: var(--gold-light);">Distinción Absoluta</em>
+            </h1>
+            <p class="text-neutral-400 mt-5 mb-12 text-sm tracking-wide max-w-xl mx-auto" style="font-size:0.875rem; line-height:1.8; letter-spacing:0.04em;">
+                Seleccionamos los inmuebles más exclusivos. Cada detalle, negociado a su favor.
+            </p>
+
+            <form method="GET" action="{% url 'propiedades:catalogo' %}">
+                <div class="search-bar flex flex-col md:flex-row overflow-hidden shadow-2xl max-w-3xl mx-auto">
+                    <div class="flex-1 relative">
+                        <select name="operacion" class="search-select">
+                            <option value="">Operación</option>
+                            <option value="alquiler">En Alquiler</option>
+                            <option value="venta">En Venta</option>
+                            <option value="alquiler_temporal">Alquiler Temporal</option>
+                        </select>
+                    </div>
+                    <div class="flex-1 relative">
+                        <select name="tipo" class="search-select">
+                            <option value="">Tipo de Propiedad</option>
+                            <option value="casa">Casa</option>
+                            <option value="departamento">Departamento</option>
+                            <option value="monoambiente">Monoambiente</option>
+                            <option value="ph">PH</option>
+                            <option value="quinta">Quinta / Barrio Cerrado</option>
+                        </select>
+                    </div>
+                    <div class="flex-1">
+                        <input type="text" name="barrio" class="search-input" placeholder="Barrio o localidad…">
+                    </div>
+                    <button type="submit" class="search-btn">Buscar</button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <div class="stats-bar py-10 px-5 sm:px-8">
+        <div class="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+            <div>
+                <div class="stat-val"><span class="count-me" data-target="250">250</span>+</div>
+                <div class="stat-label mt-1">Propiedades gestionadas</div>
+            </div>
+            <div>
+                <div class="stat-val"><span class="count-me" data-target="14">5</span></div>
+                <div class="stat-label mt-1">Años en el mercado</div>
+            </div>
+            <div>
+                <div class="stat-val"><span class="count-me" data-target="98">98</span>%</div>
+                <div class="stat-label mt-1">Clientes satisfechos</div>
+            </div>
+            <div>
+                <div class="stat-val"><span class="count-me" data-target="5">5</span></div>
+                <div class="stat-label mt-1">Ciudades</div>
+            </div>
+        </div>
+    </div>
+
+    <main class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 py-20" id="propiedades">
+        <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-14 reveal">
+            <div>
+                <p class="section-eyebrow mb-3">Selección exclusiva</p>
+                <h2 class="section-title">Propiedades Destacadas</h2>
+            </div>
+            <div class="gold-rule hidden sm:block" style="width:60px; margin-bottom:8px;"></div>
+        </div>
+
+        {% if propiedades %}
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                {% for propiedad in propiedades %}
+                <article class="prop-card reveal" data-delay="{{ forloop.counter0 }}00ms">
+                    <div class="img-wrap relative h-60 sm:h-64" style="background:#111113;">
+                        {% if propiedad.imagen_principal %}
+                            <img src="{{ propiedad.imagen_principal.url }}" alt="{{ propiedad.titulo }}" class="w-full h-full object-cover opacity-80">
+                        {% else %}
+                            <div class="w-full h-full flex items-center justify-center" style="color:var(--fog);"><svg width="36" height="36" fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="1"/><path d="M3 15l5-5 4 4 3-3 4 4"/><circle cx="8.5" cy="8.5" r="1.5"/></svg></div>
+                        {% endif %}
+                        <div style="position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(10,10,11,0.65) 100%);pointer-events:none;"></div>
+                        <span class="badge-op" style="position:absolute;top:14px;left:14px;">{{ propiedad.get_tipo_operacion_display }}</span>
+                        <span style="position:absolute;bottom:14px;right:14px;font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:rgba(232,201,122,0.7);font-family:'Jost',sans-serif;">{{ propiedad.get_tipo_propiedad_display }}</span>
+                    </div>
+
+                    <div class="p-6" style="background:var(--ink);">
+                        <div class="price-tag mb-1">{{ propiedad.precio_formateado }}</div>
+                        {% if propiedad.expensas > 0 %}
+                            <div style="font-size:0.7rem;color:var(--fog);letter-spacing:0.06em;margin-bottom:0.75rem;">+ {{ propiedad.expensas }} expensas</div>
+                        {% endif %}
+                        <h3 class="text-white font-medium leading-snug mb-1" style="font-size:0.95rem;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;">{{ propiedad.titulo }}</h3>
+                        <p style="font-size:0.75rem;color:var(--mist);letter-spacing:0.04em;margin-bottom:1.25rem;">📍 {{ propiedad.barrio_localidad }}</p>
+
+                        <div class="flex items-center justify-between py-4 stat-pill" style="border-top:1px solid rgba(201,168,76,0.1);border-bottom:1px solid rgba(201,168,76,0.1);margin-bottom:1.25rem;">
+                            <span>🚪 <strong>{{ propiedad.ambientes }}</strong> Amb.</span>
+                            <span>🛏️ <strong>{{ propiedad.dormitorios }}</strong> Dorm.</span>
+                            <span>🚿 <strong>{{ propiedad.banos }}</strong> Baños</span>
+                            <span>📐 <strong>{{ propiedad.metros_totales }}</strong> m²</span>
+                        </div>
+
+                        <a href="{% url 'propiedades:detalle' propiedad.pk %}" class="card-cta">Ver ficha completa</a>
+                    </div>
+                </article>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty-state rounded text-center py-20 px-6 max-w-md mx-auto reveal">
+                <svg class="mx-auto mb-4 opacity-20" width="40" height="40" fill="none" stroke="#C9A84C" stroke-width="1" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="1"/><path d="M3 15l5-5 4 4 3-3 4 4"/></svg>
+                <p class="font-display text-neutral-300 text-xl mb-2" style="font-family:'Cormorant Garamond',serif;font-weight:300;">Sin propiedades destacadas</p>
+                <p class="text-xs text-neutral-600 leading-relaxed">Marcá los inmuebles como <em>Destacada</em> desde el panel de Django para exhibirlos aquí.</p>
+            </div>
+        {% endif %}
+    </main>
+
+    <section id="servicios" class="py-24 px-5 sm:px-8" style="background:var(--charcoal); border-top:1px solid rgba(201,168,76,0.08); border-bottom:1px solid rgba(201,168,76,0.08);">
+        <div class="max-w-5xl mx-auto">
+            <div class="mb-16 reveal">
+                <p class="section-eyebrow mb-3">Cómo trabajamos</p>
+                <h2 class="section-title">Servicio<em style="font-style:italic;"> a su medida</em></h2>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-0 rounded-sm overflow-hidden">
+                <div class="service-item p-8 md:p-10 reveal group transform transition-all duration-500 ease-out hover:bg-white/[0.02] relative" data-delay="00ms">
+                    <div class="absolute bottom-0 left-0 w-0 h-[1px] bg-[#c9a84c]/40 transition-all duration-700 group-hover:w-full"></div>
+                    <div class="service-number mb-4 text-neutral-600 group-hover:text-[#c9a84c] transform transition-all duration-500 group-hover:-translate-y-1" style="font-family:'Jost',sans-serif; font-weight:300; font-size:2.5rem; line-height:1;">01</div>
+                    <h3 class="text-white font-medium mb-3 transition-colors duration-500 group-hover:text-amber-400" style="font-size:0.95rem; letter-spacing:0.04em;">Asesoría personalizada</h3>
+                    <p class="transition-colors duration-500 group-hover:text-neutral-200" style="font-size:0.8125rem; line-height:1.8; color:var(--mist);">Un agente dedicado entiende sus necesidades y filtra el mercado para usted, sin ruido.</p>
+                </div>
+                
+                <div class="service-item p-8 md:p-10 md:border-l md:border-r reveal group transform transition-all duration-500 ease-out hover:bg-white/[0.02] relative" style="border-color:rgba(201,168,76,0.1);" data-delay="100ms">
+                    <div class="absolute bottom-0 left-0 w-0 h-[1px] bg-[#c9a84c]/40 transition-all duration-700 group-hover:w-full"></div>
+                    <div class="service-number mb-4 text-neutral-600 group-hover:text-[#c9a84c] transform transition-all duration-500 group-hover:-translate-y-1" style="font-family:'Jost',sans-serif; font-weight:300; font-size:2.5rem; line-height:1;">02</div>
+                    <h3 class="text-white font-medium mb-3 transition-colors duration-500 group-hover:text-amber-400" style="font-size:0.95rem; letter-spacing:0.04em;">Valuación de mercado</h3>
+                    <p class="transition-colors duration-500 group-hover:text-neutral-200" style="font-size:0.8125rem; line-height:1.8; color:var(--mist);">Tasación profesional basada en datos reales del segmento premium para maximizar su inversión.</p>
+                </div>
+                
+                <div class="service-item p-8 md:p-10 reveal group transform transition-all duration-500 ease-out hover:bg-white/[0.02] relative" data-delay="200ms">
+                    <div class="absolute bottom-0 left-0 w-0 h-[1px] bg-[#c9a84c]/40 transition-all duration-700 group-hover:w-full"></div>
+                    <div class="service-number mb-4 text-neutral-600 group-hover:text-[#c9a84c] transform transition-all duration-500 group-hover:-translate-y-1" style="font-family:'Jost',sans-serif; font-weight:300; font-size:2.5rem; line-height:1;">03</div>
+                    <h3 class="text-white font-medium mb-3 transition-colors duration-500 group-hover:text-amber-400" style="font-size:0.95rem; letter-spacing:0.04em;">Cierre y postventa</h3>
+                    <p class="transition-colors duration-500 group-hover:text-neutral-200" style="font-size:0.8125rem; line-height:1.8; color:var(--mist);">Acompañamos cada etapa del proceso legal y financiero. El vínculo no termina en la firma.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-24 px-5 sm:px-8 bg-[#0b0b0c] overflow-hidden">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-16 reveal">
+                <p class="section-eyebrow mb-3">Experiencias reales</p>
+                <h2 class="section-title">Casos de Éxito</h2>
+                <div class="w-12 h-[1px] bg-[#c9a84c]/40 mx-auto mt-4"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="p-8 border-t-2 border-[#c9a84c]/30 flex flex-col justify-between reveal group transform transition-all duration-500 ease-out hover:-translate-y-3 hover:border-[#c9a84c] relative overflow-hidden" 
+                     style="background: linear-gradient(180deg, rgba(255,255,255,0.02) 0%, rgba(255,255,255,0.005) 100%); backdrop-blur-sm; box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);" 
+                     data-delay="00ms">
+                    <div class="absolute inset-0 bg-gradient-to-tr from-transparent via-[#c9a84c]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
+                    <div class="relative z-10">
+                        <div class="flex gap-1 text-[#c9a84c] text-xs mb-5 transition-transform duration-500 group-hover:scale-105 origin-left">★★★★★</div>
+                        <p class="text-neutral-300 italic font-light mb-6 transition-colors duration-500 group-hover:text-white" style="font-family:'Cormorant Garamond',serif; font-size:1.15rem; line-height:1.6;">
+                            "La discreción y velocidad con la que manejaron la compra de nuestra residencia en San Lorenzo fue impecable. Entendieron el segmento luxury desde el primer llamado."
+                        </p>
+                    </div>
+                    <div class="relative z-10 pt-4 border-t border-white/5">
+                        <h4 class="text-white text-xs uppercase tracking-widest font-medium transition-colors duration-500 group-hover:text-[#c9a84c]">Guillermo M.</h4>
+                        <p class="text-neutral-600 text-[10px] uppercase tracking-wider mt-1">Inversor Privado</p>
+                    </div>
+                </div>
+
+                <div class="p-8 border-t-2 border-[#c9a84c]/30 flex flex-col justify-between reveal group transform transition-all duration-500 ease-out hover:-translate-y-3 hover:border-[#c9a84c] relative overflow-hidden" 
+                     style="background: linear-gradient(180deg, rgba(255,255,255,0.02) 0%, rgba(255,255,255,0.005) 100%); backdrop-blur-sm; box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);" 
+                     data-delay="100ms">
+                    <div class="absolute inset-0 bg-gradient-to-tr from-transparent via-[#c9a84c]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
+                    <div class="relative z-10">
+                        <div class="flex gap-1 text-[#c9a84c] text-xs mb-5 transition-transform duration-500 group-hover:scale-105 origin-left">★★★★★</div>
+                        <p class="text-neutral-300 italic font-light mb-6 transition-colors duration-500 group-hover:text-white" style="font-family:'Cormorant Garamond',serif; font-size:1.15rem; line-height:1.6;">
+                            "Tasar una propiedad de estas características requiere analítica real del mercado premium. Golden State logró defender nuestro valor y cerrar la venta en tiempo récord."
+                        </p>
+                    </div>
+                    <div class="relative z-10 pt-4 border-t border-white/5">
+                        <h4 class="text-white text-xs uppercase tracking-widest font-medium transition-colors duration-500 group-hover:text-[#c9a84c]">Sofía Alvear</h4>
+                        <p class="text-neutral-600 text-[10px] uppercase tracking-wider mt-1">Propietaria</p>
+                    </div>
+                </div>
+
+                <div class="p-8 border-t-2 border-[#c9a84c]/30 flex flex-col justify-between reveal group transform transition-all duration-500 ease-out hover:-translate-y-3 hover:border-[#c9a84c] relative overflow-hidden" 
+                     style="background: linear-gradient(180deg, rgba(255,255,255,0.02) 0%, rgba(255,255,255,0.005) 100%); backdrop-blur-sm; box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);" 
+                     data-delay="200ms">
+                    <div class="absolute inset-0 bg-gradient-to-tr from-transparent via-[#c9a84c]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
+                    <div class="relative z-10">
+                        <div class="flex gap-1 text-[#c9a84c] text-xs mb-5 transition-transform duration-500 group-hover:scale-105 origin-left">★★★★★</div>
+                        <p class="text-neutral-300 italic font-light mb-6 transition-colors duration-500 group-hover:text-white" style="font-family:'Cormorant Garamond',serif; font-size:1.15rem; line-height:1.6;">
+                            "Su servicio de postventa es de otro planeta. Meses después de la firma del contrato temporal corporativo, nos siguieron asistiendo con la misma dedicación."
+                        </p>
+                    </div>
+                    <div class="relative z-10 pt-4 border-t border-white/5">
+                        <h4 class="text-white text-xs uppercase tracking-widest font-medium transition-colors duration-500 group-hover:text-[#c9a84c]">Estudio Abdenur</h4>
+                        <p class="text-neutral-600 text-[10px] uppercase tracking-wider mt-1">Cliente Corporativo</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contacto" class="relative py-32 px-5 sm:px-8 overflow-hidden bg-cover bg-fixed bg-center bg-no-repeat" 
+             style="background-image: url('/media/casabonita1.png');">
+        
+        <div class="absolute inset-0 bg-gradient-to-b from-[#0a0a0b]/90 via-[#0a0a0b]/70 to-[#0a0a0b]/95 pointer-events-none"></div>
+        <div class="absolute top-0 left-0 w-full h-[1px] bg-[#c9a84c]/20"></div>
+
+        <div class="max-w-4xl mx-auto text-center relative z-10 reveal">
+            <p class="section-eyebrow mb-4" style="color: #c9a84c;">Colección de Propiedades Privadas</p>
+            
+            <h2 class="text-white font-light mb-6" style="font-family:'Cormorant Garamond',serif; font-size: clamp(2.2rem, 5vw, 3.5rem); line-height: 1.15; letter-spacing: 0.01em;">
+                Encuentre su lugar en <br><em style="font-style:italic; color: var(--gold-light);">Gold States</em>
+            </h2>
+            
+            <p class="text-neutral-300 mt-4 mb-8 text-sm tracking-wide max-w-xl mx-auto leading-relaxed" style="letter-spacing: 0.04em;">
+                Más del 40% de nuestras transacciones de alta gama se gestionan en privado (*Off-Market*). Conéctese con un asesor ahora mismo o síganos en nuestros canales oficiales.
+            </p>
+
+            <div class="flex items-center justify-center gap-6 mb-10 text-xs tracking-[0.2em] uppercase font-medium text-neutral-400" style="font-family: 'Jost', sans-serif;">
+                <a href="https://www.instagram.com/goldstate_bienesraices/" target="_blank" rel="noopener" class="flex items-center gap-2 hover:text-[#c9a84c] transition-colors duration-300">
+                    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+                    Instagram
+                </a>
+                <span class="text-white/10">|</span>
+                <a href="https://www.facebook.com/share/1biLLeTB7m/" target="_blank" rel="noopener" class="flex items-center gap-2 hover:text-[#c9a84c] transition-colors duration-300">
+                    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+                    Facebook
+                </a>
+            </div>
+
+            <a href="{% url 'propiedades:contacto' %}" 
+               class="inline-flex items-center justify-center font-medium uppercase text-center select-none transform transition-all duration-300 hover:scale-[1.02] shadow-2xl"
+               style="background: linear-gradient(135deg, #c9a84c 0%, #9a7535 100%); color: #0a0a0b; font-family: 'Jost', sans-serif; font-weight: 600; font-size: 0.72rem; letter-spacing: 0.22em; padding: 1.1rem 3rem; border-radius: 2px;">
+                Iniciar Consulta
+            </a>
+        </div>
+    </section>
+{% endblock %}
+
+
+{% block extra_js %}
+    <script src="{% static 'propiedades/js/index.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,157 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Golden State | Propiedades Exclusivas{% endblock %}</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        html, body {
+            overflow-x: hidden;
+            position: relative;
+            width: 100%;
+        }
+
+        /* 🟢 Animación premium de respiración (pulso) para WhatsApp */
+        @keyframes wsp-pulse {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4), 0 0 0 0 rgba(37, 211, 102, 0.4);
+            }
+            50% {
+                transform: scale(1.05);
+                box-shadow: 0 4px 25px rgba(37, 211, 102, 0.6), 0 0 0 15px rgba(37, 211, 102, 0);
+            }
+            100% {
+                transform: scale(1);
+                box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4), 0 0 0 0 rgba(37, 211, 102, 0);
+            }
+        }
+
+        .wsp-animado {
+            animation: wsp-pulse 2.5s infinite ease-in-out;
+            transition: all 0.3s ease;
+        }
+
+        .wsp-animado:hover {
+            animation-play-state: paused; /* Se frena la respiración al apoyar el mouse para mejor control */
+            transform: scale(1.1) !important;
+            background-color: #128c7e !important;
+        }
+    </style>
+
+    {% block extra_css %}{% endblock %}
+</head>
+<body class="bg-[#0a0a0b]">
+
+    <header class="gs-header sticky top-0 z-50 w-full bg-[#0a0a0b]/90 backdrop-blur-md border-b border-white/5">
+        <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 h-[100px] flex items-center justify-between relative">
+            
+            <a href="{% url 'propiedades:index' %}" class="flex items-center h-full select-none z-50 transition-transform duration-300 hover:scale-[1.01]">
+                <img src="{{ transform_url|default:'/media/logo.png' }}" 
+                    alt="Golden State Logo" 
+                    class="h-auto w-[110px] sm:w-[135px] lg:w-[170px] py-1 transform-gpu"
+                    style="transform-origin: left center; min-width: 110px;">
+            </a>
+            
+            <nav class="hidden md:flex items-center gap-4 sm:gap-6 md:gap-8">
+                <a href="{% url 'propiedades:catalogo' %}" class="text-xs uppercase tracking-widest text-neutral-400 hover:text-amber-400 transition font-medium" style="letter-spacing:0.18em; font-size:0.68rem;">Propiedades</a>
+                <a href="{% url 'propiedades:nosotros' %}" class="text-xs uppercase tracking-widest text-neutral-400 hover:text-amber-400 transition font-medium" style="letter-spacing:0.18em; font-size:0.68rem;">Nosotros</a>
+                <a href="{% url 'propiedades:contacto' %}" class="text-xs uppercase tracking-widest text-neutral-400 hover:text-amber-400 transition font-medium" style="letter-spacing:0.18em; font-size:0.68rem;">Contacto</a>
+            </nav>
+
+            <button id="menu-btn" class="flex md:hidden flex-col justify-between w-6 h-3.5 text-[#c9a84c] focus:outline-none z-[100] cursor-pointer select-none" aria-label="Abrir menú">
+                <span class="w-full h-[1.5px] bg-[#c9a84c] transition-all duration-300 origin-left pointer-events-none"></span>
+                <span class="w-full h-[1.5px] bg-[#c9a84c] transition-all duration-300 pointer-events-none"></span>
+                <span class="w-full h-[1.5px] bg-[#c9a84c] transition-all duration-300 origin-left pointer-events-none"></span>
+            </button>
+
+            <div id="menu-dropdown" class="fixed top-0 right-0 h-screen w-[75vw] sm:w-[50vw] bg-[#0a0a0b] border-l border-white/5 flex flex-col gap-8 p-8 z-50 shadow-2xl transition-transform duration-300 translate-x-full md:hidden">
+                <div class="h-[100px]"></div> 
+                <a href="{% url 'propiedades:catalogo' %}" class="mobile-link text-sm uppercase tracking-widest text-neutral-400 hover:text-amber-400 transition font-medium" style="letter-spacing: 0.18em;">Propiedades</a>
+                <a href="{% url 'propiedades:nosotros' %}" class="mobile-link text-xs uppercase tracking-widest text-neutral-400 hover:text-amber-400 transition font-medium" style="letter-spacing: 0.18em;">Nosotros</a>
+                <a href="{% url 'propiedades:contacto' %}" class="mobile-link text-xs uppercase tracking-widest text-neutral-400 hover:text-amber-400 transition font-medium" style="letter-spacing: 0.18em;">Contacto</a>
+            </div>
+            
+            <div class="hidden lg:flex items-center gap-4">
+                <div class="w-10 h-[1px] bg-[#c9a84c]/60"></div>
+                <span class="text-neutral-400 uppercase tracking-[0.3em] font-medium select-none" 
+                      style="font-size: 0.72rem; font-family: 'Jost', sans-serif;">
+                    Luxury Real Estate
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer class="py-16 px-5 sm:px-8 border-t border-white/5 bg-[#121214]">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8">
+            
+            <div class="flex items-center h-[45px] transition-transform duration-300 hover:scale-[1.02]">
+                <img src="/media/logo.png" alt="Golden State Logo" class="h-full w-auto object-contain max-h-[45px]">
+            </div>
+            
+            <div class="flex flex-col gap-2 text-center md:text-right font-medium">
+                <p class="text-neutral-400 uppercase tracking-[0.18em]" style="font-size:0.65rem;">
+                    &copy; 2026 Golden State Luxury Real Estate — Todos los derechos reservados
+                </p>
+                <p class="text-neutral-600 uppercase tracking-[0.15em]" style="font-size:0.6rem;">
+                    Design & Development by <span class="text-[#c9a84c]/80">Arjona Blas</span>
+                </p>
+            </div>
+            
+            <div class="flex items-center gap-5">
+                <a href="https://www.instagram.com/goldstate_bienesraices/" target="_blank" rel="noopener" class="text-neutral-500 hover:text-[#c9a84c] transition-colors duration-300" aria-label="Siganos en Instagram">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+                </a>
+                <a href="https://www.facebook.com/share/1biLLeTB7m/" target="_blank" rel="noopener" class="text-neutral-500 hover:text-[#c9a84c] transition-colors duration-300" aria-label="Siganos en Facebook">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+                </a>
+                <div class="hidden md:block w-8 h-[1px] bg-[#c9a84c]/30 ml-2"></div>
+            </div>
+        </div>
+    </footer>
+
+    <a href="https://wa.me/5493874209690" 
+       target="_blank" 
+       rel="noopener" 
+       class="wsp-animado fixed bottom-6 right-6 z-50 flex items-center justify-center w-16 h-16 bg-[#25d366] rounded-full transform-gpu active:scale-95"
+       aria-label="Contacto por WhatsApp">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" 
+             alt="WhatsApp Logo" 
+             class="w-9 h-9 object-contain select-none pointer-events-none">
+    </a>
+
+    <script>
+        const menuBtn = document.getElementById('menu-btn');
+        const menuDropdown = document.getElementById('menu-dropdown');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+
+        if (menuBtn && menuDropdown) {
+            menuBtn.addEventListener('click', () => {
+                menuDropdown.classList.toggle('translate-x-full');
+            });
+
+            mobileLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    menuDropdown.classList.add('translate-x-full');
+                });
+            });
+        }
+    </script>
+    
+    {% block extra_js %}
+    {% endblock %}
+</body>
+</html>

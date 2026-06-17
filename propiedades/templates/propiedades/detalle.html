@@ -1,0 +1,203 @@
+{% extends 'propiedades/base.html' %}
+{% load static %}
+
+{% block title %}{{ propiedad.titulo }} | Golden State{% endblock %}
+
+{% block extra_css %}
+    <!-- 🎨 El CSS exclusivo de la ficha de detalle -->
+    <link rel="stylesheet" href="{% static 'propiedades/css/detalle.css' %}" />
+{% endblock %}
+
+{% block content %}
+    <main class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 py-10 pb-20">
+
+        <!-- 🧭 Breadcrumbs de Navegación -->
+        <nav class="breadcrumb flex items-center gap-2 mb-8 reveal visible">
+            <a href="{% url 'propiedades:index' %}">Inicio</a>
+            <span style="color:var(--fog);">/</span>
+            <a href="{% url 'propiedades:catalogo' %}">Propiedades</a>
+            <span style="color:var(--fog);">/</span>
+            <span style="color:#D0D0D8;">{{ propiedad.titulo|truncatechars:40 }}</span>
+        </nav>
+
+        <!-- 🏷️ Cabecera de Ficha: Título y Precio -->
+        <div class="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6 mb-10 reveal visible">
+            <div class="flex-1">
+                <span class="badge-op mb-3 inline-block">{{ propiedad.get_tipo_operacion_display }}</span>
+                <h1 style="font-family:'Cormorant Garamond',serif;font-weight:300;font-size:clamp(1.8rem,4vw,2.8rem);color:#F0EDE8;line-height:1.1;margin-bottom:0.5rem;">{{ propiedad.titulo }}</h1>
+                <p style="font-size:0.8rem;letter-spacing:0.06em;color:var(--mist);">
+                    📍 {{ propiedad.direccion }}, {{ propiedad.barrio_localidad }}, {{ propiedad.provincia }}
+                </p>
+            </div>
+            <div class="price-card p-6 lg:min-w-[240px] lg:text-right" style="flex-shrink:0;">
+                <p class="section-eyebrow mb-2">Precio</p>
+                <div class="price-main">{{ propiedad.precio_formateado }}</div>
+                {% if propiedad.expensas > 0 %}
+                    <p style="font-size:0.75rem;color:var(--fog);margin-top:0.4rem;letter-spacing:0.04em;">+ ARS {{ propiedad.expensas|floatformat:0 }} expensas</p>
+                {% endif %}
+                <div style="margin-top:0.75rem;padding-top:0.75rem;border-top:1px solid rgba(201,168,76,0.1);font-size:0.65rem;color:var(--fog);letter-spacing:0.15em;text-transform:uppercase;">
+                    {{ propiedad.visitas }} visita{{ propiedad.visitas|pluralize:"s" }} &nbsp;·&nbsp; {{ propiedad.get_tipo_propiedad_display }}
+                </div>
+            </div>
+        </div>
+
+        <!-- 🖼️ Visor de Imágenes y Tarjeta de Agente -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-10 reveal visible">
+            
+            <!-- Visor Principal -->
+            <div class="lg:col-span-2 relative overflow-hidden h-[420px] sm:h-[500px]" style="background:var(--charcoal);">
+                {% if propiedad.imagen_principal %}
+                    <img id="visor-principal" src="{{ propiedad.imagen_principal.url }}" alt="{{ propiedad.titulo }}">
+                {% else %}
+                    <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:var(--fog);">
+                        <svg width="48" height="48" fill="none" stroke="currentColor" stroke-width="0.8" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="1"/><path d="M3 15l5-5 4 4 3-3 4 4"/><circle cx="8.5" cy="8.5" r="1.5"/></svg>
+                    </div>
+                {% endif %}
+                <div style="position:absolute;top:0;left:0;width:40px;height:40px;border-top:2px solid var(--gold);border-left:2px solid var(--gold);pointer-events:none;"></div>
+                <div style="position:absolute;bottom:0;right:0;width:40px;height:40px;border-bottom:2px solid var(--gold);border-right:2px solid var(--gold);pointer-events:none;"></div>
+                <div style="position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(10,10,11,0.5) 100%);pointer-events:none;"></div>
+            </div>
+
+            <!-- Columna de Soporte Lateral (Galería + Agente) -->
+            <div class="flex flex-col gap-4">
+                <div style="padding:1.25rem 1.5rem;background:var(--ink);border:1px solid rgba(201,168,76,0.08);">
+                    <p class="section-eyebrow mb-3">Galería</p>
+                    <div class="grid grid-cols-3 gap-2 max-h-[200px] overflow-y-auto" id="galeria-thumbs">
+                        {% if propiedad.imagen_principal %}
+                            <div class="thumb active" data-src="{{ propiedad.imagen_principal.url }}">
+                                <img src="{{ propiedad.imagen_principal.url }}" alt="Portada">
+                            </div>
+                        {% endif %}
+                        {% for foto in propiedad.imagenes.all %}
+                            <div class="thumb" data-src="{{ foto.imagen.url }}">
+                                <img src="{{ foto.imagen.url }}" alt="Foto {{ forloop.counter }}">
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="agent-card p-5 flex-1 flex flex-col justify-between">
+                    <div>
+                        <p class="section-eyebrow mb-2">Agente asignado</p>
+                        <p style="font-family:'Cormorant Garamond',serif;font-size:1.25rem;font-weight:300;color:#F0EDE8;margin-bottom:0.25rem;">
+                            {{ propiedad.agente.get_full_name|default:propiedad.agente.username }}
+                        </p>
+                        <p style="font-size:0.72rem;letter-spacing:0.1em;color:var(--fog);">Golden State Luxury Real Estate</p>
+                    </div>
+                    <div style="margin-top:1.5rem;">
+                        <a href="https://wa.me/{{ propiedad.agente.perfil.whatsapp|default:'5491100000000' }}?text=Hola!%20Me%20interesa%20la%20propiedad:%20{{ propiedad.titulo|urlencode }}%20({{ propiedad.precio_formateado|urlencode }}).%20¿Podrían%20darme%20más%20información?" 
+                           target="_blank" class="wsp-btn">
+                            <svg width="17" height="17" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.555 4.116 1.524 5.847L.057 23.882a.5.5 0 0 0 .61.637l6.227-1.635A11.945 11.945 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.907 0-3.698-.526-5.228-1.44l-.373-.222-3.868 1.016.977-3.767-.243-.386A9.955 9.955 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+                            Consultar por WhatsApp
+                        </a>
+                        <p style="font-size:0.65rem;text-align:center;color:var(--fog);letter-spacing:0.1em;margin-top:0.75rem;">Respondemos en el día</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 📊 3. Grilla de Métricas Destacadas -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-10 reveal visible">
+            <div class="stat-box">
+                <div class="stat-val">{{ propiedad.ambientes }}</div>
+                <div class="stat-label">Ambientes</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-val">{{ propiedad.dormitorios }}</div>
+                <div class="stat-label">Dormitorios</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-val">{{ propiedad.banos }}</div>
+                <div class="stat-label">Baños</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-val">{{ propiedad.metros_totales }}<span style="font-size:1rem;color:var(--mist);">m²</span></div>
+                <div class="stat-label">Superficie total</div>
+            </div>
+        </div>
+
+        <!-- 📝 4. Bloques de Información Inferior -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div class="lg:col-span-2 space-y-6 reveal visible">
+                <div style="background:var(--ink);border:1px solid rgba(201,168,76,0.08);padding:2rem;">
+                    <div class="flex items-center gap-4 mb-5">
+                        <p class="section-eyebrow">Descripción</p>
+                        <div class="gold-rule"></div>
+                    </div>
+                    <div class="prop-desc">{{ propiedad.descripcion }}</div>
+                </div>
+
+                <div style="background:var(--ink);border:1px solid rgba(201,168,76,0.08);padding:2rem;">
+                    <div class="flex items-center gap-4 mb-5">
+                        <p class="section-eyebrow">Superficies y datos</p>
+                        <div class="gold-rule"></div>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8">
+                        <div class="data-row">
+                            <span class="data-key">M² cubiertos</span>
+                            <span class="data-val">{{ propiedad.metros_cubiertos|default:"—" }} m²</span>
+                        </div>
+                        <div class="data-row">
+                            <span class="data-key">M² totales</span>
+                            <span class="data-val">{{ propiedad.metros_totales }} m²</span>
+                        </div>
+                        <div class="data-row">
+                            <span class="data-key">Tipo de inmueble</span>
+                            <span class="data-val" style="text-transform:uppercase;font-size:0.75rem;letter-spacing:0.08em;">{{ propiedad.get_tipo_propiedad_display }}</span>
+                        </div>
+                        <div class="data-row">
+                            <span class="data-key">Operación</span>
+                            <span class="data-val">{{ propiedad.get_tipo_operacion_display }}</span>
+                        </div>
+                        <div class="data-row">
+                            <span class="data-key">Código postal</span>
+                            <span class="data-val">{{ propiedad.codigo_postal|default:"—" }}</span>
+                        </div>
+                        <div class="data-row">
+                            <span class="data-key">Provincia</span>
+                            <span class="data-val">{{ propiedad.provincia }}</span>
+                        </div>
+                        {% if propiedad.expensas > 0 %}
+                        <div class="data-row">
+                            <span class="data-key">Expensas</span>
+                            <span class="data-val">ARS {{ propiedad.expensas|floatformat:0 }}/mes</span>
+                        </div>
+                        {% endif %}
+                        <div class="data-row">
+                            <span class="data-key">Moneda</span>
+                            <span class="data-val">{{ propiedad.moneda }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CTA Flotante Derecho -->
+            <div class="space-y-5 reveal visible">
+                <div style="background:var(--ink);border:1px solid rgba(201,168,76,0.15);padding:1.75rem;">
+                    <p class="section-eyebrow mb-3">¿Te interesa?</p>
+                    <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:300;color:#F0EDE8;line-height:1.3;margin-bottom:0.75rem;">Coordiná una visita presencial</h3>
+                    <p style="font-size:0.78rem;line-height:1.8;color:var(--mist);margin-bottom:1.5rem;">Nuestro agente te acompaña en cada paso, con total discreción y sin compromiso.</p>
+                    <a href="https://wa.me/{{ propiedad.agente.perfil.whatsapp|default:'5491100000000' }}?text=Hola!%20Quiero%20coordinar%20una%20visita%20para:%20{{ propiedad.titulo|urlencode }}" 
+                       target="_blank" class="wsp-btn" style="font-size:0.72rem;">
+                        <svg width="15" height="15" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.555 4.116 1.524 5.847L.057 23.882a.5.5 0 0 0 .61.637l6.227-1.635A11.945 11.945 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.907 0-3.698-.526-5.228-1.44l-.373-.222-3.868 1.016.977-3.767-.243-.386A9.955 9.955 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+                        Coordinar visita
+                    </a>
+                </div>
+
+                <div style="background:linear-gradient(135deg,rgba(201,168,76,0.07),transparent);border:1px solid rgba(201,168,76,0.12);padding:1.75rem;">
+                    <div class="flex items-baseline gap-2 mb-3">
+                        <span class="text-white font-medium uppercase tracking-widest text-[1rem]">GOLDEN</span>
+                        <span class="text-[#c9a84c] uppercase tracking-widest text-[0.85rem]">STATE</span>
+                    </div>
+                    <p style="font-size:0.75rem;line-height:1.8;color:var(--mist);">Más de 14 años gestionando las propiedades más exclusivas del mercado. Confidencialidad y excelencia en cada operación.</p>
+                    <div style="margin-top:1.25rem;padding-top:1rem;border-top:1px solid rgba(201,168,76,0.1);font-size:0.62rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--fog);">Luxury Real Estate &copy; 2026</div>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}
+
+{% block extra_js %}
+    <!-- ⚡ Tu JavaScript del visor de fotos -->
+    <script src="{% static 'propiedades/js/detalle.js' %}"></script>
+{% endblock %}

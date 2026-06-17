@@ -1,0 +1,153 @@
+{% extends 'propiedades/base.html' %}
+{% load static %}
+
+{% block title %}Golden State | Nuestra Firma{% endblock %}
+
+{% block extra_css %}
+    <!-- Enlazamos tu CSS del index porque contiene las variables de color de lujo y configuraciones de fuentes -->
+    <link rel="stylesheet" href="{% static 'propiedades/css/index.css' %}" />
+{% endblock %}
+
+{% block content %}
+    <!-- 1. HERO DE LA FIRMA (Efecto Parallax Fijo con Imagen Corporativa) -->
+    <section class="hero-section relative py-32 px-5 sm:px-8 overflow-hidden bg-cover bg-fixed bg-center bg-no-repeat"
+             style="background-image: linear-gradient(180deg, rgba(10, 10, 11, 0.75) 0%, rgba(10, 10, 11, 0.98) 100%), url('/media/casabonita.png');">
+        <div class="max-w-4xl mx-auto text-center relative z-10">
+            <p class="section-eyebrow mb-4">Nuestra Firma</p>
+            <div class="gold-rule-center mb-6"></div>
+            <h1 class="font-display text-white mb-4" style="font-family:'Cormorant Garamond',serif; font-weight:300; font-size:clamp(2.5rem,6vw,4.5rem); line-height:1.1; letter-spacing:0.02em;">
+                Legado de Confianza &<br><em style="font-style:italic; color: var(--gold-light);">Discreción Absoluta</em>
+            </h1>
+            <p class="text-neutral-400 text-sm tracking-wide max-w-xl mx-auto leading-relaxed" style="letter-spacing:0.04em;">
+                No solo gestionamos metros cuadrados; custodiamos el patrimonio, la privacidad y las aspiraciones de quienes confían en nuestra firma.
+            </p>
+        </div>
+    </section>
+
+    <!-- 2. SECCIÓN: MISIÓN, VISIÓN Y VALORES (Efecto Cristales Interactivos) -->
+    <section class="py-24 px-5 sm:px-8 bg-[#0a0a0b]">
+        <div class="max-w-6xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-0 rounded-sm overflow-hidden border border-white/5" style="background: rgba(255,255,255,0.01);">
+                
+                <!-- Misión -->
+                <div class="p-8 md:p-12 reveal group transform transition-all duration-500 ease-out hover:bg-white/[0.02] relative">
+                    <div class="absolute bottom-0 left-0 w-0 h-[1px] bg-[#c9a84c]/40 transition-all duration-700 group-hover:w-full"></div>
+                    <p class="text-[#c9a84c] text-[10px] tracking-[0.25em] uppercase font-semibold mb-3">01 · Propósito</p>
+                    <h3 class="text-white font-light mb-4 text-xl" style="font-family:'Cormorant Garamond',serif;">Nuestra Misión</h3>
+                    <p class="text-neutral-400 text-xs leading-relaxed" style="font-size:0.85rem;">
+                        Conectar a inversores sofisticados con activos inmobiliarios singulares, ejecutando transacciones complejas bajo los más estrictos estándares de confidencialidad y excelencia analítica.
+                    </p>
+                </div>
+
+                <!-- Visión -->
+                <div class="p-8 md:p-12 md:border-l md:border-r reveal group transform transition-all duration-500 ease-out hover:bg-white/[0.02] relative" style="border-color:rgba(201,168,76,0.1);">
+                    <div class="absolute bottom-0 left-0 w-0 h-[1px] bg-[#c9a84c]/40 transition-all duration-700 group-hover:w-full"></div>
+                    <p class="text-[#c9a84c] text-[10px] tracking-[0.25em] uppercase font-semibold mb-3">02 · Proyección</p>
+                    <h3 class="text-white font-light mb-4 text-xl" style="font-family:'Cormorant Garamond',serif;">Nuestra Visión</h3>
+                    <p class="text-neutral-400 text-xs leading-relaxed" style="font-size:0.85rem;">
+                        Consolidarnos como el referente indiscutido en real estate de alta gama de la región, siendo reconocidos por operar el porfolio privado *Off-Market* más selecto del mercado americano.
+                    </p>
+                </div>
+
+                <!-- Valores -->
+                <div class="p-8 md:p-12 reveal group transform transition-all duration-500 ease-out hover:bg-white/[0.02] relative">
+                    <div class="absolute bottom-0 left-0 w-0 h-[1px] bg-[#c9a84c]/40 transition-all duration-700 group-hover:w-full"></div>
+                    <p class="text-[#c9a84c] text-[10px] tracking-[0.25em] uppercase font-semibold mb-3">03 · Pilares</p>
+                    <h3 class="text-white font-light mb-4 text-xl" style="font-family:'Cormorant Garamond',serif;">Valores Fundamentales</h3>
+                    <ul class="text-neutral-400 text-xs space-y-2" style="font-size:0.85rem;">
+                        <li><strong class="text-neutral-200">Lealtad Comercial:</strong> El interés del cliente es nuestro único norte.</li>
+                        <li><strong class="text-neutral-200">Ética Inflexible:</strong> Operamos con absoluta transparencia legal.</li>
+                        <li><strong class="text-neutral-200">Rigor Profesional:</strong> Cada tasación está respaldada por analítica real.</li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. SECCIÓN: EL EQUIPO DIRECTIVO & ASESORES (Cards Luxury Dinámicas) -->
+    <section class="py-24 px-5 sm:px-8 bg-[#0b0b0c] overflow-hidden border-t border-white/5">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-16 reveal">
+                <p class="section-eyebrow mb-3">Capital Humano</p>
+                <h2 class="section-title">Nuestros Directores & Asesores</h2>
+                <div class="w-12 h-[1px] bg-[#c9a84c]/40 mx-auto mt-4"></div>
+            </div>
+
+            <!-- Grilla Dinámica del Staff -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                {% if staff %}
+                    {% for agente in staff %}
+                    <!-- CARD DINÁMICA DE AGENTE -->
+                    <article class="prop-card reveal flex flex-col justify-between" data-delay="{{ forloop.counter0 }}00ms">
+                        
+                        <!-- Contenedor de Imagen con Efecto Luxury Hover -->
+                        <div class="img-wrap relative h-80 bg-[#111113] overflow-hidden">
+                            {% if agente.foto %}
+                                <img src="{{ agente.foto.url }}" alt="{{ agente.nombre }} - Golden State" class="w-full h-full object-cover opacity-75 grayscale hover:grayscale-0 transition-all duration-700">
+                            {% else %}
+                                <!-- Placeholder si falta foto -->
+                                <div class="w-full h-full flex items-center justify-center bg-[#1a1a1d]" style="color:var(--fog);">
+                                    <svg width="48" height="48" fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                                </div>
+                            {% endif %}
+                            <div style="position:absolute; inset:0; background:linear-gradient(180deg, transparent 50%, rgba(10,10,11,0.9) 100%); pointer-events:none;"></div>
+                            <!-- Muestra el rol en el listón de la foto -->
+                            <span class="badge-op" style="position:absolute; bottom:14px; left:14px;">{{ agente.get_cargo_display }}</span>
+                        </div>
+
+                        <!-- Información Textual -->
+                        <div class="p-6 flex-1 flex flex-col justify-between" style="background:var(--ink);">
+                            <div>
+                                <h3 class="text-white font-medium text-base mb-1" style="font-family:'Jost',sans-serif;">{{ agente.nombre }}</h3>
+                                <!-- Cargo estilizado en oro según tu nueva configuración del admin -->
+                                <p style="font-size:0.75rem; color:var(--gold); letter-spacing:0.1em; text-transform:uppercase; font-weight:500; margin-bottom:1rem;">
+                                    {{ agente.get_cargo_display }} · Golden State
+                                </p>
+                                <p class="text-neutral-400 text-xs leading-relaxed mb-4">
+                                    {{ agente.biografia }}
+                                </p>
+                            </div>
+                            <div class="pt-4 border-t border-white/5 text-[10px] uppercase tracking-widest text-neutral-500">
+                                ✉️ {{ agente.email }}
+                            </div>
+                        </div>
+                    </article>
+                    {% endfor %}
+                {% else %}
+                    <!-- Estado vacío por si no hay nadie cargado en el panel -->
+                    <div class="col-span-1 sm:col-span-2 lg:col-span-3 text-center py-12 border border-dashed border-white/10 rounded-sm">
+                        <p class="font-display text-neutral-400 text-lg" style="font-family:'Cormorant Garamond',serif;">No se encontraron miembros activos</p>
+                        <p class="text-neutral-600 text-xs mt-1">Cargue agentes desde el Administrador de Django para visualizarlos aquí.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. CONTACTO MAESTRO PARALLAX (Cierre de Embudo Unificado) -->
+    <section class="relative py-32 px-5 sm:px-8 overflow-hidden bg-cover bg-fixed bg-center bg-no-repeat" 
+             style="background-image: url('/media/casabonita1.png');">
+        <div class="absolute inset-0 bg-gradient-to-b from-[#0a0a0b]/90 via-[#0a0a0b]/70 to-[#0a0a0b]/95 pointer-events-none"></div>
+        <div class="absolute top-0 left-0 w-full h-[1px] bg-[#c9a84c]/20"></div>
+
+        <div class="max-w-4xl mx-auto text-center relative z-10 reveal">
+            <p class="section-eyebrow mb-4" style="color: #c9a84c;">Asesoramiento Exclusivo</p>
+            <h2 class="text-white font-light mb-6" style="font-family:'Cormorant Garamond',serif; font-size: clamp(2.2rem, 5vw, 3.5rem); line-height: 1.15; letter-spacing: 0.01em;">
+                Inicie una conversación con <br><em style="font-style:italic; color: var(--gold-light);">nuestro equipo directivo</em>
+            </h2>
+            <p class="text-neutral-300 mt-4 mb-12 text-sm tracking-wide max-w-xl mx-auto leading-relaxed" style="letter-spacing: 0.04em;">
+                Escríbanos hoy mismo. Un broker preferencial tomará su solicitud con absoluta reserva profesional.
+            </p>
+            <a href="{% url 'propiedades:contacto' %}" 
+               class="inline-flex items-center justify-center font-medium uppercase text-center select-none transform transition-all duration-300 hover:scale-[1.02] shadow-2xl"
+               style="background: linear-gradient(135deg, #c9a84c 0%, #9a7535 100%); color: #0a0a0b; font-family: 'Jost', sans-serif; font-weight: 600; font-size: 0.72rem; letter-spacing: 0.22em; padding: 1.1rem 3rem; border-radius: 2px;">
+                Iniciar Consulta
+            </a>
+        </div>
+    </section>
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static 'propiedades/js/index.js' %}"></script>
+{% endblock %}

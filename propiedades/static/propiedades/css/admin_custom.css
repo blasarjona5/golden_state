@@ -1,0 +1,214 @@
+/* ==============================================================================
+   🌟 PERSONALIZACIÓN PREMIUM SIMPLIFICADA - GOLDEN STATE AGENT ADMIN
+   ============================================================================== */
+
+:root {
+    --primary: #0a0a0b;       /* Negro Obsidiana */
+    --secondary: #121214;     /* Carbón Suave */
+    --accent: #C9A84C;        /* Oro Golden State */
+    --primary-fg: #F5F4F0;
+    --body-bg: #0b0b0c;
+    --body-fg: #D5D5DC;
+    --border-gold: rgba(201,168,76,0.12);
+    --input-bg: #161619;
+}
+
+/* 🏢 1. FONDOS GENERALES Y LECTURA SUAVE */
+body, 
+.content-wrapper, 
+.main-footer, 
+.modal-content {
+    background-color: var(--body-bg) !important;
+    color: var(--body-fg) !important;
+}
+
+/* 🧭 2. ENCABEZADOS Y MENÚ LATERAL LIMPIO */
+.main-header, 
+.brand-link, 
+.main-sidebar, 
+.sidebar, 
+.user-panel {
+    background-color: var(--secondary) !important;
+    border-color: var(--border-gold) !important;
+}
+
+/* Tipografía de títulos corporativos */
+.brand-text, 
+.nav-header, 
+.card-title, 
+h1, h2, h3, h4 {
+    color: var(--accent) !important;
+    font-family: 'Cormorant Garamond', serif !important;
+    letter-spacing: 0.08em;
+}
+
+.nav-link p, 
+.breadcrumb-item a, 
+.breadcrumb-item.active {
+    color: #b3b3ba !important;
+}
+
+.nav-link:hover p, .nav-link.active p {
+    color: var(--accent) !important;
+}
+
+/* 🗂️ 3. TARJETAS DE CARGA DE PROPIEDADES MÁS LIMPIAS */
+.card {
+    background: var(--secondary) !important;
+    border: 1px solid var(--border-gold) !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2) !important;
+    border-radius: 6px !important;
+}
+
+.card-header, .card-footer {
+    background: #17171a !important;
+    border-bottom: 1px solid var(--border-gold) !important;
+}
+
+/* Inputs enfocados en la comodidad de carga del agente */
+.form-control, .custom-select, .select2-selection {
+    background-color: var(--input-bg) !important;
+    border: 1px solid rgba(201,168,76,0.2) !important;
+    color: var(--primary-fg) !important;
+    border-radius: 4px !important;
+}
+
+.form-control:focus, .custom-select:focus {
+    border-color: var(--accent) !important;
+    box-shadow: 0 0 5px rgba(201,168,76,0.25) !important;
+}
+
+/* 📊 4. TABLAS DE MUESTRA DE PUBLICACIONES */
+.table th {
+    background-color: #17171a !important;
+    color: var(--accent) !important;
+    border-bottom: 2px solid var(--accent) !important;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+}
+
+.table td {
+    background-color: var(--secondary) !important;
+    border-color: rgba(201,168,76,0.04) !important;
+}
+
+.table-striped tbody tr:nth-of-type(odd) td {
+    background-color: #0e0e10 !important;
+}
+
+/* ⚡ 5. BOTONES MODERNOS Y LIMPIOS */
+.btn-success, 
+.btn-primary, 
+input[type=submit].default, 
+.btn-info {
+    background: linear-gradient(135deg, var(--accent) 0%, #a48434 100%) !important;
+    color: #0A0A0B !important;
+    font-weight: 600 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.05em !important;
+    border: none !important;
+    border-radius: 4px !important;
+}
+
+.btn-secondary {
+    background: #222226 !important;
+    color: #eaeaea !important;
+    border: 1px solid rgba(255,255,255,0.05) !important;
+}
+
+/* 🔐 6. LOGIN AJUSTADO CON TU NUEVA IMAGEN JPG */
+.login-page {
+    background-color: var(--primary) !important;
+    background-image: radial-gradient(ellipse 80% 80% at 50% -20%, rgba(201,168,76,0.06) 0%, transparent 80%) !important;
+}
+
+.login-box .card-body {
+    background-color: var(--secondary) !important;
+    border: 1px solid var(--border-gold) !important;
+    border-radius: 8px !important;
+}
+
+/* 🌟 7. DIMENSIONADO PERFECTO DEL LOGO DEL AGENTE */
+.login-box .login-logo {
+    display: block !important;
+    text-align: center !important;
+    margin-bottom: 20px !important;
+}
+
+/* Ocultamos cualquier texto feo sobrante */
+.login-box .login-logo a b,
+.login-box .login-logo a span {
+    display: none !important;
+}
+
+/* Control estricto de tu imagen logoadmin.jpg para que no se rompa ni deforme */
+.login-box .login-logo img {
+    max-height: 110px !important;
+    width: auto !important;
+    margin: 0 auto !important;
+    display: block !important;
+    border-radius: 4px !important;
+}
+
+.login-box .login-card-body .login-box-msg {
+    color: #9a9a9f !important;
+    font-size: 0.85rem !important;
+    border-bottom: 1px solid rgba(201, 168, 76, 0.1) !important;
+    padding-bottom: 15px !important;
+    margin-bottom: 15px !important;
+}
+
+/* ==============================================================================
+   📱 8. OPTIMIZACIÓN MÓVIL: ACCIONES RECIENTES DESPLEGABLES (ACORDEÓN)
+   ============================================================================== */
+@media (max-width: 767.98px) {
+    /* Identifica la columna lateral derecha del Home donde Jazzmin renderiza la actividad */
+    #content-wrapper .col-md-3, 
+    .card:has(.fa-history) {
+        position: relative !important;
+        margin-top: 20px !important;
+    }
+
+    /* Ocultamos el listado del historial por defecto para que no estorbe */
+    .card:has(.fa-history) .card-body {
+        display: none;
+        padding-top: 10px !important;
+    }
+
+    /* Convertimos la cabecera en un botón táctil */
+    .card:has(.fa-history) .card-header {
+        cursor: pointer !important;
+        position: relative !important;
+        padding-right: 40px !important;
+        background: #19191c !important; 
+        border-bottom: 1px solid var(--border-gold) !important;
+    }
+
+    /* Agregamos el indicador de flecha con FontAwesome */
+    .card:has(.fa-history) .card-header::after {
+        content: "\f078" !important;
+        font-family: "Font Awesome 5 Free" !important;
+        font-weight: 900 !important;
+        position: absolute !important;
+        right: 20px !important;
+        top: 50% !important;
+        transform: translateY(-50%) !important;
+        color: var(--accent) !important;
+        transition: transform 0.25s ease !important;
+    }
+
+    /* Despliegue interactivo por foco táctil o hover controlado */
+    .card:has(.fa-history):active .card-body,
+    .card:has(.fa-history):focus-within .card-body,
+    .card:has(.fa-history):hover .card-body {
+        display: block !important;
+    }
+
+    /* Giramos la flecha dorada al abrirse */
+    .card:has(.fa-history):active .card-header::after,
+    .card:has(.fa-history):focus-within .card-header::after,
+    .card:has(.fa-history):hover .card-header::after {
+        transform: translateY(-50%) rotate(180deg) !important;
+    }
+}

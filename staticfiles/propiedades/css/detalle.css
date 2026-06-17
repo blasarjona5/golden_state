@@ -1,0 +1,293 @@
+:root {
+    --gold: #C9A84C;
+    --gold-light: #E8C97A;
+    --gold-dark: #9A7535;
+    --obsidian: #0A0A0B;
+    --charcoal: #111113;
+    --ink: #1A1A1D;
+    --steel: #242428;
+    --mist: #8A8A96;
+    --fog: #56565E;
+}
+
+* { 
+    box-sizing: border-box; 
+}
+
+body {
+    background-color: var(--obsidian);
+    color: #D0D0D8;
+    font-family: 'Jost', sans-serif;
+    font-weight: 300;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Capa de textura de grano premium */
+body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+    opacity: 0.025;
+    pointer-events: none;
+    z-index: 9999;
+}
+
+/* Header Navbar */
+.gs-header {
+    background: rgba(10,10,11,0.93);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(201,168,76,0.12);
+}
+
+.logo-golden { 
+    color: var(--gold); 
+    font-family: 'Cormorant Garamond', serif; 
+    font-weight: 300; 
+    letter-spacing: 0.25em; 
+}
+
+.logo-state { 
+    color: #FFF; 
+    font-family: 'Jost', sans-serif; 
+    font-weight: 600; 
+    letter-spacing: 0.05em; 
+}
+
+/* Breadcrumb */
+.breadcrumb { 
+    font-size: 0.68rem; 
+    letter-spacing: 0.12em; 
+    text-transform: uppercase; 
+    color: var(--mist); 
+}
+
+.breadcrumb a { 
+    color: var(--gold); 
+    text-decoration: none; 
+    transition: color 0.2s; 
+}
+
+.breadcrumb a:hover { 
+    color: var(--gold-light); 
+}
+
+/* Separadores Dorados */
+.gold-rule { 
+    width: 48px; 
+    height: 1px; 
+    background: linear-gradient(90deg, var(--gold), transparent); 
+}
+
+/* Títulos */
+.section-eyebrow { 
+    font-size: 0.62rem; 
+    letter-spacing: 0.3em; 
+    text-transform: uppercase; 
+    color: var(--gold); 
+    font-weight: 500; 
+}
+
+.section-title { 
+    font-family: 'Cormorant Garamond', serif; 
+    font-weight: 300; 
+    color: #F0EDE8; 
+    font-size: clamp(1.5rem, 3vw, 2rem); 
+    line-height: 1.2; 
+}
+
+/* Visor de Fotos Principal */
+#visor-principal {
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover;
+    transition: opacity 0.35s ease;
+}
+
+/* Miniaturas de la Galería */
+.thumb {
+    cursor: pointer;
+    border: 2px solid transparent;
+    overflow: hidden;
+    transition: border-color 0.2s, transform 0.2s;
+    aspect-ratio: 4/3;
+}
+
+.thumb:hover { 
+    border-color: rgba(201,168,76,0.4); 
+    transform: scale(1.02); 
+}
+
+.thumb.active { 
+    border-color: var(--gold); 
+}
+
+.thumb img { 
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover; 
+    transition: opacity 0.2s; 
+}
+
+.thumb:hover img { 
+    opacity: 0.85; 
+}
+
+/* Tarjeta de Precio */
+.price-card {
+    background: var(--ink);
+    border: 1px solid rgba(201,168,76,0.15);
+}
+
+.price-main {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    color: var(--gold-light);
+    font-size: clamp(2rem, 4vw, 2.8rem);
+    line-height: 1;
+}
+
+/* Bloques de Características (Ambientes, Dormitorios, m²) */
+.stat-box {
+    background: var(--ink);
+    border: 1px solid rgba(201,168,76,0.08);
+    padding: 1.25rem;
+    text-align: center;
+    transition: border-color 0.25s;
+}
+
+.stat-box:hover { 
+    border-color: rgba(201,168,76,0.25); 
+}
+
+.stat-val { 
+    font-family: 'Cormorant Garamond', serif; 
+    font-size: 2rem; 
+    font-weight: 300; 
+    color: #F0EDE8; 
+    line-height: 1; 
+}
+
+.stat-label { 
+    font-size: 0.65rem; 
+    letter-spacing: 0.15em; 
+    text-transform: uppercase; 
+    color: var(--mist); 
+    margin-top: 0.3rem; 
+}
+
+/* Filas de Información Técnica */
+.data-row {
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid rgba(201,168,76,0.06);
+    font-size: 0.8125rem;
+}
+
+.data-row:last-child { 
+    border-bottom: none; 
+}
+
+.data-key { 
+    color: var(--mist); 
+    letter-spacing: 0.04em; 
+}
+
+.data-val { 
+    color: #D0D0D8; 
+    font-weight: 500; 
+}
+
+/* Botón de WhatsApp Premium */
+.wsp-btn {
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    gap: 0.6rem;
+    background: linear-gradient(135deg, #25D366, #128C7E);
+    color: #fff;
+    font-family: 'Jost', sans-serif; 
+    font-weight: 600; 
+    font-size: 0.78rem;
+    letter-spacing: 0.1em; 
+    text-transform: uppercase;
+    padding: 1rem 1.5rem; 
+    text-decoration: none;
+    transition: filter 0.2s, transform 0.2s;
+}
+
+.wsp-btn:hover { 
+    filter: brightness(1.1); 
+    transform: translateY(-1px); 
+}
+
+/* Botón de Retorno */
+.back-btn {
+    display: inline-flex; 
+    align-items: center; 
+    gap: 0.4rem;
+    font-size: 0.68rem; 
+    letter-spacing: 0.15em; 
+    text-transform: uppercase;
+    color: var(--mist); 
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.back-btn:hover { 
+    color: var(--gold); 
+}
+
+.back-btn svg { 
+    transition: transform 0.2s; 
+}
+
+.back-btn:hover svg { 
+    transform: translateX(-2px); 
+}
+
+/* Tarjeta del Asesor */
+.agent-card {
+    background: linear-gradient(135deg, rgba(201,168,76,0.07), rgba(201,168,76,0.02));
+    border: 1px solid rgba(201,168,76,0.15);
+}
+
+/* Etiqueta de Operación */
+.badge-op {
+    display: inline-block;
+    background: rgba(10,10,11,0.9); 
+    border: 1px solid rgba(201,168,76,0.3);
+    color: var(--gold-light);
+    font-family: 'Jost', sans-serif; 
+    font-size: 0.6rem; 
+    font-weight: 500;
+    letter-spacing: 0.2em; 
+    text-transform: uppercase;
+    padding: 0.35rem 0.85rem;
+}
+
+/* Bloque Descriptivo */
+.prop-desc { 
+    font-size: 0.875rem; 
+    line-height: 1.9; 
+    color: #9A9AA6; 
+    white-space: pre-line; 
+}
+
+/* Animaciones de scroll reveal */
+.reveal { 
+    opacity: 0; 
+    transform: translateY(16px); 
+    transition: opacity 0.6s ease, transform 0.6s ease; 
+}
+
+.reveal.visible { 
+    opacity: 1; 
+    transform: none; 
+}
+
+@media (max-width:640px) {
+    .price-main { font-size: 2rem; }
+}

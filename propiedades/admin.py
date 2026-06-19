@@ -20,7 +20,7 @@ class PerfilAgenteInline(admin.StackedInline):
 class UserAdmin(BaseUserAdmin):
     inlines = (PerfilAgenteInline,)
 
-    # 🟢 SOLUCIÓN MÓVIL DEFINITIVA: Forzamos Checkboxes verticales para roles y permisos
+    # FIX MÓVIL: Checkboxes de permisos y roles en formato lista vertical táctil
     def formfield_for_manytomany(self, db_field, request, **kwargs):
         if db_field.name in ('groups', 'user_permissions'):
             kwargs['widget'] = forms.CheckboxSelectMultiple()
@@ -55,16 +55,16 @@ class ImagenPropiedadInline(admin.TabularInline):
 
 @admin.register(Publicacion)
 class PublicacionAdmin(admin.ModelAdmin):
-    # 📝 Agregamos 'acciones_propiedad' al final del listado principal
-    list_display = ('titulo', 'tipo_operacion', 'tipo_propiedad', 'precio_formateado', 'barrio_localidad', 'agente', 'destacada', 'disponible', 'visitas', 'acciones_propiedad')
+    # 📝 Listado principal usando los nombres exactos de tu models.py
+    list_display = ('titulo', 'tipo_operacion', 'tipo_propiedad', 'precio_formateado', 'barrio_localidad', 'agente', 'destacada_hero', 'destacada', 'disponible', 'visitas', 'acciones_propiedad')
     
-    # Filtros laterales rápidos (Con Jazzmin se van a ver estéticos y limpios)
-    list_filter = ('tipo_operacion', 'tipo_propiedad', 'moneda', 'disponible', 'destacada', 'agente')
+    # Filtros laterales rápidos vinculados sin errores a tus campos
+    list_filter = ('tipo_operacion', 'tipo_propiedad', 'moneda', 'destacada_hero', 'destacada', 'disponible', 'agente')
     
     # Buscador superior en tiempo real
     search_fields = ('titulo', 'direccion', 'barrio_localidad')
     
-    # Campo de solo lectura para evitar que alteren las métricas de visitas a mano
+    # Campo de solo lectura para visitas
     readonly_fields = ('visitas',)
     
     # Inyección de las múltiples imágenes en formato tabla
@@ -76,7 +76,8 @@ class PublicacionAdmin(admin.ModelAdmin):
             'fields': ('agente',)
         }),
         ('Información Principal', {
-            'fields': ('titulo', 'descripcion', 'tipo_propiedad', 'tipo_operacion', 'disponible', 'destacada')
+            # 🟢 HILERA EXCLUSIVA: Los tres checks juntos para que controles la Home a tu gusto de costado
+            'fields': ('titulo', 'descripcion', 'tipo_propiedad', 'tipo_operacion', ('disponible', 'destacada', 'destacada_hero'))
         }),
         ('Precios y Gastos', {
             'fields': (('moneda', 'precio'), 'expensas') 
@@ -95,10 +96,7 @@ class PublicacionAdmin(admin.ModelAdmin):
     # 🔗 PANEL DE ACCIONES INTERACTIVAS (Ver en Web y Copiado rápido para WhatsApp)
     def acciones_propiedad(self, obj):
         if obj.id:
-            # Captura la URL del detalle en el frontend
             url_frontend = reverse('propiedades:detalle', args=[obj.id])
-            
-            # Renderiza los dos botones con lógica de portapapeles nativa
             return format_html(
                 """
                 <div style="display: flex; gap: 6px; align-items: center;">
@@ -139,19 +137,10 @@ class PublicacionAdmin(admin.ModelAdmin):
 
 @admin.register(ConsultaContacto)
 class ConsultaContactoAdmin(admin.ModelAdmin):
-    # Columnas elegantes que verá el administrador en el menú principal
     list_display = ('nombre', 'email', 'telefono', 'interes', 'creado_el', 'leido')
-    
-    # Filtros rápidos laterales adaptados a Jazzmin
     list_filter = ('leido', 'interes', 'creado_el')
-    
-    # Buscador en tiempo real para encontrar rápidamente un inversor o correo
     search_fields = ('nombre', 'email', 'mensaje', 'telefono')
-    
-    # Protegemos la fecha para que sea de solo lectura
     readonly_fields = ('creado_el',)
-    
-    # Acción masiva en lote para marcar varias consultas procesadas con 2 clicks
     actions = ['marcar_como_leidas']
 
     def marcar_como_leidas(self, request, queryset):
@@ -163,14 +152,9 @@ class ConsultaContactoAdmin(admin.ModelAdmin):
             
     marcar_como_leidas.short_description = "🟢 Marcar consultas seleccionadas como LEÍDAS / GESTIONADAS"
     
-    # Distribución visual premium para leer los mensajes cómodamente
     fieldsets = (
-        ('Datos del Solicitante', {
-            'fields': ('nombre', 'email', 'telefono')
-        }),
-        ('Detalles del Requerimiento', {
-            'fields': ('interes', 'mensaje', 'creado_el')
-        }),
+        ('Datos del Solicitante', { 'fields': ('nombre', 'email', 'telefono') }),
+        ('Detalles del Requerimiento', { 'fields': ('interes', 'mensaje', 'creado_el') }),
         ('Control de Gestión', {
             'fields': ('leido',),
             'description': 'Tilde este campo una vez que se haya comunicado con el cliente.'
@@ -182,12 +166,8 @@ class AgenteCorporativoAdmin(admin.ModelAdmin):
     list_display = ('nombre', 'cargo', 'email', 'orden', 'disponible')
     list_filter = ('cargo', 'disponible')
     search_fields = ('nombre', 'email', 'biografia')
-    list_editable = ('orden', 'disponible')  # Permite ordenar y activar/desactivar rápido desde la lista
+    list_editable = ('orden', 'disponible')  
     fieldsets = (
-        ('Información Principal', {
-            'fields': ('nombre', 'cargo', 'foto', 'biografia')
-        }),
-        ('Contacto & Jerarquía', {
-            'fields': ('email', 'orden', 'disponible')
-        }),
+        ('Información Principal', { 'fields': ('nombre', 'cargo', 'foto', 'biografia') }),
+        ('Contacto & Jerarquía', { 'fields': ('email', 'orden', 'disponible') }),
     )

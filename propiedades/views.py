@@ -5,15 +5,15 @@ from .models import Publicacion, ConsultaContacto, AgenteCorporativo
 def lista_propiedades(request):
     """Muestra la Home de Golden State dividiendo el Slider (Hero) de las Destacadas de abajo"""
     
-    # 🟢 NUEVA CONSULTA SLIDER: Trae solo las tildadas específicamente para el carrusel (Hero)
+    # 🟢 CORREGIDO: Ahora sí filtra estrictamente por el casillero real de tu administración
     propiedades_hero = Publicacion.objects.filter(disponible=True, destacada_hero=True)[:5]
     
-    # 🟢 MANTENEMOS DESTACADAS HOME: Las propiedades que se listan abajo en las grillas de la Home
+    # 🟢 MANTENEMOS DESTACADAS HOME: Traemos solo las que tengan el check 'destacada=True' para la grilla de abajo
     propiedades_home = Publicacion.objects.filter(disponible=True, destacada=True)[:6]
     
     contexto = {
-        'propiedades': propiedades_hero,               # Va directo al Swiper del Slider
-        'propiedades_destacadas': propiedades_home,    # Va a las tarjetas del catálogo de la Home
+        'propiedades_hero': propiedades_hero,        # Variable exclusiva para el Swiper del Slider
+        'propiedades': propiedades_home,             # Cambiado a 'propiedades' para que alimente tu grilla actual sin romper el HTML
     }
     return render(request, 'propiedades/index.html', contexto)
 

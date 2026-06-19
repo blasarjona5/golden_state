@@ -7,11 +7,9 @@
     <link rel="stylesheet" href="{% static 'propiedades/css/index.css' %}" />
 {% endblock %}
 
-
 {% block content %}
 
-
-<!-- 1. Enlace a Swiper CSS (Ponlo en el <head> de tu página si es posible) -->
+<!-- 1. Enlace a Swiper CSS -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 
 <!-- 🟢 SECCIÓN HERO TOTALMENTE DINÁMICA -->
@@ -20,9 +18,8 @@
     <div class="swiper heroSwiper absolute inset-0 w-full h-full z-0">
         <div class="swiper-wrapper">
             
-            {% if propiedades %}
-                <!-- 🟢 CORRECCIÓN: Quitamos el slice porque la vista ya se encarga de limitar y optimizar la consulta -->
-                {% for propiedad in propiedades %}
+            {% if propiedades_hero %}
+                {% for propiedad in propiedades_hero %}
                 <div class="swiper-slide relative w-full h-full bg-cover bg-center bg-no-repeat" 
                      style="background-image: url('{% if propiedad.imagen_principal %}{{ propiedad.imagen_principal.url }}{% endif %}');">
                     
@@ -123,21 +120,14 @@
         border-radius: 4px;
     }
 </style>
-    <!-- Espaciador técnico para que la barra flotante no pise las estadísticas de abajo -->
+
+    <!-- Espaciador técnico -->
     <div class="h-12 bg-[var(--obsidian)]"></div>
 
-
-
-    <!-- 🟢 CORRECCIÓN: Cambiamos 'bg-fixed' por 'bg-scroll' para dejar la imagen estática. 
-     Añadimos un color de fondo negro por si la imagen tarda en cargar, y 'bg-cover bg-center' para que encuadre perfecto siempre. -->
-<!-- 🟢 CORRECCIÓN: Quitamos el fondo negro pesado y dejamos que la imagen brille con su luz original.
-     Mantenemos 'bg-scroll' para que no tire glitches ni se rompa al deslizar. -->
-<!-- 🟢 CORRECCIÓN: Usamos bg-local y forzamos de manera estricta el estilo de fondo para que la imagen quede fija en su lugar y no se desplace de fondo -->
-<!-- 🌟 SECCIÓN CON GRADIENTE LUXURY: Eliminamos la imagen de fondo y colocamos un degradado fluido de Negro a Dorado Metalizado y Negro -->
-<!-- 🟢 CORRECCIÓN: Reducimos los paddings (pt-36 pb-20) para que la sección sea más baja y estilizada -->
+<!-- 🌟 SECCIÓN CON GRADIENTE LUXURY -->
 <section class="hero-section relative pt-36 pb-20 px-5 sm:px-8 overflow-hidden bg-gradient-to-b from-[#0a0a0b] via-[#1a150e] to-[#0a0a0b]">
         
-        <!-- Destello dorado de ambiente (recalibrado para la nueva altura) -->
+        <!-- Destello dorado de ambiente -->
         <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[280px] sm:w-[450px] h-[250px] bg-[#c9a84c]/10 rounded-full blur-[100px] pointer-events-none"></div>
         
         <div class="max-w-4xl mx-auto text-center relative z-10">
@@ -154,7 +144,7 @@
                 Propiedades de<br><em style="font-style:italic; color: #F3E5AB; font-family:'Cormorant Garamond',serif;">Distinción Absoluta</em>
             </h1>
             
-            <!-- Bajada de texto (Se achicó el margen inferior de mb-14 a mb-10) -->
+            <!-- Bajada de texto -->
             <p class="text-neutral-400 mt-4 mb-10 text-sm tracking-widest max-w-xl mx-auto" 
                style="font-size:0.85rem; line-height:1.8; letter-spacing:0.06em; font-family:'Jost',sans-serif;">
                 SELECCIONAMOS LOS INMUEBLES MÁS EXCLUSIVOS. CADA DETALLE, NEGOCIADO A SU FAVOR.
@@ -395,7 +385,6 @@
         </div>
     </section>
 {% endblock %}
-
 
 {% block extra_js %}
     <script src="{% static 'propiedades/js/index.js' %}"></script>

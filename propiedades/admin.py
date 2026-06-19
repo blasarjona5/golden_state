@@ -3,6 +3,7 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import User
 from django.utils.html import format_html
 from django.urls import reverse
+from django import forms
 from .models import Publicacion, ImagenPropiedad, PerfilAgente, ConsultaContacto
 from .models import AgenteCorporativo
 
@@ -18,6 +19,13 @@ class PerfilAgenteInline(admin.StackedInline):
 
 class UserAdmin(BaseUserAdmin):
     inlines = (PerfilAgenteInline,)
+
+    # 🟢 SOLUCIÓN MÓVIL DEFINITIVA: Forzamos Checkboxes verticales para roles y permisos
+    def formfield_for_manytomany(self, db_field, request, **kwargs):
+        if db_field.name in ('groups', 'user_permissions'):
+            kwargs['widget'] = forms.CheckboxSelectMultiple()
+            kwargs['help_text'] = "Seleccione las casillas correspondientes para asignar roles o permisos."
+        return super().formfield_for_manytomany(db_field, request, **kwargs)
 
     def get_inline_instances(self, request, obj=None):
         if not obj:
@@ -47,14 +55,11 @@ class ImagenPropiedadInline(admin.TabularInline):
 
 @admin.register(Publicacion)
 class PublicacionAdmin(admin.ModelAdmin):
-    # 🟢 CORRECCIÓN: Agregamos 'destacada_hero' al listado para visualizarlo a simple vista
-    list_display = ('titulo', 'tipo_operacion', 'tipo_propiedad', 'precio_formateado', 'barrio_localidad', 'agente', 'destacada', 'destacada_hero', 'disponible', 'visitas', 'acciones_propiedad')
+    # 📝 Agregamos 'acciones_propiedad' al final del listado principal
+    list_display = ('titulo', 'tipo_operacion', 'tipo_propiedad', 'precio_formateado', 'barrio_localidad', 'agente', 'destacada', 'disponible', 'visitas', 'acciones_propiedad')
     
-    # 🟢 CORRECCIÓN: Permitimos editar 'destacada' y 'destacada_hero' con switch rápido en la tabla principal
-    list_editable = ('destacada', 'destacada_hero', 'disponible')
-    
-    # 🟢 CORRECCIÓN: Sumamos 'destacada_hero' a los filtros rápidos de la derecha
-    list_filter = ('tipo_operacion', 'tipo_propiedad', 'moneda', 'disponible', 'destacada', 'destacada_hero', 'agente')
+    # Filtros laterales rápidos (Con Jazzmin se van a ver estéticos y limpios)
+    list_filter = ('tipo_operacion', 'tipo_propiedad', 'moneda', 'disponible', 'destacada', 'agente')
     
     # Buscador superior en tiempo real
     search_fields = ('titulo', 'direccion', 'barrio_localidad')
@@ -71,8 +76,7 @@ class PublicacionAdmin(admin.ModelAdmin):
             'fields': ('agente',)
         }),
         ('Información Principal', {
-            # 🟢 CORRECCIÓN: Incorporado al formulario de edición en el panel
-            'fields': ('titulo', 'descripcion', 'tipo_propiedad', 'tipo_operacion', 'disponible', 'destacada', 'destacada_hero')
+            'fields': ('titulo', 'descripcion', 'tipo_propiedad', 'tipo_operacion', 'disponible', 'destacada')
         }),
         ('Precios y Gastos', {
             'fields': (('moneda', 'precio'), 'expensas') 
@@ -135,10 +139,19 @@ class PublicacionAdmin(admin.ModelAdmin):
 
 @admin.register(ConsultaContacto)
 class ConsultaContactoAdmin(admin.ModelAdmin):
+    # Columnas elegantes que verá el administrador en el menú principal
     list_display = ('nombre', 'email', 'telefono', 'interes', 'creado_el', 'leido')
+    
+    # Filtros rápidos laterales adaptados a Jazzmin
     list_filter = ('leido', 'interes', 'creado_el')
+    
+    # Buscador en tiempo real para encontrar rápidamente un inversor o correo
     search_fields = ('nombre', 'email', 'mensaje', 'telefono')
+    
+    # Protegemos la fecha para que sea de solo lectura
     readonly_fields = ('creado_el',)
+    
+    # Acción masiva en lote para marcar varias consultas procesadas con 2 clicks
     actions = ['marcar_como_leidas']
 
     def marcar_como_leidas(self, request, queryset):
@@ -150,6 +163,7 @@ class ConsultaContactoAdmin(admin.ModelAdmin):
             
     marcar_como_leidas.short_description = "🟢 Marcar consultas seleccionadas como LEÍDAS / GESTIONADAS"
     
+    # Distribución visual premium para leer los mensajes cómodamente
     fieldsets = (
         ('Datos del Solicitante', {
             'fields': ('nombre', 'email', 'telefono')
@@ -168,7 +182,7 @@ class AgenteCorporativoAdmin(admin.ModelAdmin):
     list_display = ('nombre', 'cargo', 'email', 'orden', 'disponible')
     list_filter = ('cargo', 'disponible')
     search_fields = ('nombre', 'email', 'biografia')
-    list_editable = ('orden', 'disponible')  
+    list_editable = ('orden', 'disponible')  # Permite ordenar y activar/desactivar rápido desde la lista
     fieldsets = (
         ('Información Principal', {
             'fields': ('nombre', 'cargo', 'foto', 'biografia')

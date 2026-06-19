@@ -163,20 +163,17 @@ input[type=submit].default,
    📱 8. OPTIMIZACIÓN MÓVIL: ACCIONES RECIENTES DESPLEGABLES (ACORDEÓN)
    ============================================================================== */
 @media (max-width: 767.98px) {
-    /* Identifica la columna lateral derecha del Home donde Jazzmin renderiza la actividad */
     #content-wrapper .col-md-3, 
     .card:has(.fa-history) {
         position: relative !important;
         margin-top: 20px !important;
     }
 
-    /* Ocultamos el listado del historial por defecto para que no estorbe */
     .card:has(.fa-history) .card-body {
         display: none;
         padding-top: 10px !important;
     }
 
-    /* Convertimos la cabecera en un botón táctil */
     .card:has(.fa-history) .card-header {
         cursor: pointer !important;
         position: relative !important;
@@ -185,7 +182,6 @@ input[type=submit].default,
         border-bottom: 1px solid var(--border-gold) !important;
     }
 
-    /* Agregamos el indicador de flecha con FontAwesome */
     .card:has(.fa-history) .card-header::after {
         content: "\f078" !important;
         font-family: "Font Awesome 5 Free" !important;
@@ -198,17 +194,141 @@ input[type=submit].default,
         transition: transform 0.25s ease !important;
     }
 
-    /* Despliegue interactivo por foco táctil o hover controlado */
     .card:has(.fa-history):active .card-body,
     .card:has(.fa-history):focus-within .card-body,
     .card:has(.fa-history):hover .card-body {
         display: block !important;
     }
 
-    /* Giramos la flecha dorada al abrirse */
     .card:has(.fa-history):active .card-header::after,
     .card:has(.fa-history):focus-within .card-header::after,
     .card:has(.fa-history):hover .card-header::after {
         transform: translateY(-50%) rotate(180deg) !important;
+    }
+}
+
+/* ==============================================================================
+   🔐 9. ESTILIZADO LUXURY PARA NUEVOS CHECKBOXES DE PERMISOS
+   ============================================================================== */
+.form-group div[id^="div_id_groups"] ul,
+.form-group div[id^="div_id_user_permissions"] ul,
+#id_groups, #id_user_permissions {
+    list-style: none !important;
+    padding: 15px !important;
+    background-color: var(--input-bg) !important;
+    border: 1px solid rgba(201, 168, 76, 0.15) !important;
+    border-radius: 6px !important;
+    max-height: 300px !important;
+    overflow-y: auto !important; /* Desplazamiento vertical limpio */
+    width: 100% !important;
+}
+
+/* Cada permiso / rol en una fila limpia horizontal */
+.form-group div[id^="div_id_groups"] ul li,
+.form-group div[id^="div_id_user_permissions"] ul li,
+#id_groups li, #id_user_permissions li {
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    padding: 8px 6px !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03) !important;
+    color: var(--primary-fg) !important;
+    font-size: 0.9rem !important;
+}
+
+/* Checkbox dorado corporativo e interactivo */
+.form-group input[type="checkbox"] {
+    width: 18px !important;
+    height: 18px !important;
+    cursor: pointer !important;
+    accent-color: var(--accent) !important;
+    flex-shrink: 0 !important;
+}
+
+/* ==============================================================================
+   📱 10. MÓVIL PREMIUM: CORRECCIÓN TOTAL DE CONTENEDORES Y TABLAS
+   ============================================================================== */
+@media (max-width: 767.98px) {
+    /* Forzar a que los formularios utilicen el ancho táctil real sin desbordes */
+    .content-wrapper, .container-fluid, .card, .card-body {
+        padding-left: 8px !important;
+        padding-right: 8px !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        width: 100% !important;
+    }
+
+    /* Los campos del formulario se apilan de arriba a abajo */
+    .form-group .row {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 5px !important;
+    }
+    
+    .form-group .col-sm-2, 
+    .form-group .col-sm-10,
+    .form-group [class*="col-"] {
+        width: 100% !important;
+        max-width: 100% !important;
+        flex: 0 0 100% !important;
+    }
+
+    /* Ajuste estricto para evitar que las etiquetas se partan en una sola letra */
+    #id_groups li label, #id_user_permissions li label, .form-group label {
+        display: inline-block !important;
+        width: auto !important;
+        white-space: normal !important; /* El texto largo baja de renglón de forma prolija */
+        font-size: 0.85rem !important;
+        color: var(--body-fg) !important;
+    }
+
+    /* Deslizamiento táctil suave para las grillas de propiedades */
+    .card-body.table-responsive {
+        padding: 0 !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .table td, .table th {
+        padding: 8px 6px !important;
+        font-size: 0.8rem !important;
+        white-space: nowrap !important;
+    }
+
+    /* Botones de acción fijados abajo para guardar cómodo con el pulgar */
+    .submit-row {
+        position: fixed !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        background-color: #17171a !important;
+        padding: 12px !important;
+        z-index: 1030 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 8px !important;
+        box-shadow: 0 -4px 10px rgba(0,0,0,0.4) !important;
+        border-top: 1px solid var(--border-gold) !important;
+    }
+
+    .submit-row input[type="submit"], .submit-row a.deletelink {
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 10px !important;
+        font-size: 0.85rem !important;
+        text-align: center !important;
+    }
+
+    form {
+        margin-bottom: 240px !important;
+    }
+
+    h1, .content-header h1 {
+        font-size: 1.4rem !important;
+        text-align: center !important;
+    }
+
+    .breadcrumb {
+        display: none !important;
     }
 }

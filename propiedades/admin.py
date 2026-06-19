@@ -47,11 +47,14 @@ class ImagenPropiedadInline(admin.TabularInline):
 
 @admin.register(Publicacion)
 class PublicacionAdmin(admin.ModelAdmin):
-    # 📝 Agregamos 'acciones_propiedad' al final del listado principal
-    list_display = ('titulo', 'tipo_operacion', 'tipo_propiedad', 'precio_formateado', 'barrio_localidad', 'agente', 'destacada', 'disponible', 'visitas', 'acciones_propiedad')
+    # 🟢 CORRECCIÓN: Agregamos 'destacada_hero' al listado para visualizarlo a simple vista
+    list_display = ('titulo', 'tipo_operacion', 'tipo_propiedad', 'precio_formateado', 'barrio_localidad', 'agente', 'destacada', 'destacada_hero', 'disponible', 'visitas', 'acciones_propiedad')
     
-    # Filtros laterales rápidos (Con Jazzmin se van a ver estéticos y limpios)
-    list_filter = ('tipo_operacion', 'tipo_propiedad', 'moneda', 'disponible', 'destacada', 'agente')
+    # 🟢 CORRECCIÓN: Permitimos editar 'destacada' y 'destacada_hero' con switch rápido en la tabla principal
+    list_editable = ('destacada', 'destacada_hero', 'disponible')
+    
+    # 🟢 CORRECCIÓN: Sumamos 'destacada_hero' a los filtros rápidos de la derecha
+    list_filter = ('tipo_operacion', 'tipo_propiedad', 'moneda', 'disponible', 'destacada', 'destacada_hero', 'agente')
     
     # Buscador superior en tiempo real
     search_fields = ('titulo', 'direccion', 'barrio_localidad')
@@ -68,7 +71,8 @@ class PublicacionAdmin(admin.ModelAdmin):
             'fields': ('agente',)
         }),
         ('Información Principal', {
-            'fields': ('titulo', 'descripcion', 'tipo_propiedad', 'tipo_operacion', 'disponible', 'destacada')
+            # 🟢 CORRECCIÓN: Incorporado al formulario de edición en el panel
+            'fields': ('titulo', 'descripcion', 'tipo_propiedad', 'tipo_operacion', 'disponible', 'destacada', 'destacada_hero')
         }),
         ('Precios y Gastos', {
             'fields': (('moneda', 'precio'), 'expensas') 
@@ -98,7 +102,7 @@ class PublicacionAdmin(admin.ModelAdmin):
                        style="background-color: #0a0a0b; color: #c9a84c; border: 1px solid #c9a84c; 
                               padding: 5px 9px; border-radius: 3px; text-decoration: none; 
                               font-weight: 600; font-size: 11px; display: inline-flex; align-items: center; gap: 4px;">
-                       👁️ Ver
+                        👁️ Ver
                     </a>
                     
                     <button type="button" title="Copiar enlace para mandar por WhatsApp"
@@ -113,7 +117,7 @@ class PublicacionAdmin(admin.ModelAdmin):
                             style="background-color: #c9a84c; color: #0a0a0b; border: none;
                                    padding: 5px 9px; border-radius: 3px; cursor: pointer;
                                    font-weight: 600; font-size: 11px; display: inline-flex; align-items: center; gap: 4px;">
-                       📋 Copiar Link
+                        📋 Copiar Link
                     </button>
                 </div>
                 """,
@@ -131,19 +135,10 @@ class PublicacionAdmin(admin.ModelAdmin):
 
 @admin.register(ConsultaContacto)
 class ConsultaContactoAdmin(admin.ModelAdmin):
-    # Columnas elegantes que verá el administrador en el menú principal
     list_display = ('nombre', 'email', 'telefono', 'interes', 'creado_el', 'leido')
-    
-    # Filtros rápidos laterales adaptados a Jazzmin
     list_filter = ('leido', 'interes', 'creado_el')
-    
-    # Buscador en tiempo real para encontrar rápidamente un inversor o correo
     search_fields = ('nombre', 'email', 'mensaje', 'telefono')
-    
-    # Protegemos la fecha para que sea de solo lectura
     readonly_fields = ('creado_el',)
-    
-    # Acción masiva en lote para marcar varias consultas procesadas con 2 clicks
     actions = ['marcar_como_leidas']
 
     def marcar_como_leidas(self, request, queryset):
@@ -155,7 +150,6 @@ class ConsultaContactoAdmin(admin.ModelAdmin):
             
     marcar_como_leidas.short_description = "🟢 Marcar consultas seleccionadas como LEÍDAS / GESTIONADAS"
     
-    # Distribución visual premium para leer los mensajes cómodamente
     fieldsets = (
         ('Datos del Solicitante', {
             'fields': ('nombre', 'email', 'telefono')
@@ -168,12 +162,13 @@ class ConsultaContactoAdmin(admin.ModelAdmin):
             'description': 'Tilde este campo una vez que se haya comunicado con el cliente.'
         }),
     )
+
 @admin.register(AgenteCorporativo)
 class AgenteCorporativoAdmin(admin.ModelAdmin):
     list_display = ('nombre', 'cargo', 'email', 'orden', 'disponible')
     list_filter = ('cargo', 'disponible')
     search_fields = ('nombre', 'email', 'biografia')
-    list_editable = ('orden', 'disponible')  # Permite ordenar y activar/desactivar rápido desde la lista
+    list_editable = ('orden', 'disponible')  
     fieldsets = (
         ('Información Principal', {
             'fields': ('nombre', 'cargo', 'foto', 'biografia')

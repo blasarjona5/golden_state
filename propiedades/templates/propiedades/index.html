@@ -9,45 +9,188 @@
 
 
 {% block content %}
-    <section class="hero-section relative pt-24 pb-20 px-5 sm:px-8 overflow-hidden bg-cover bg-fixed bg-center bg-no-repeat">
+
+
+<!-- 1. Enlace a Swiper CSS (Ponlo en el <head> de tu página si es posible) -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
+<!-- 🟢 SECCIÓN HERO TOTALMENTE DINÁMICA -->
+<section class="hero-section relative overflow-hidden h-[480px] md:h-[580px] flex items-center justify-center bg-black">
+    
+    <div class="swiper heroSwiper absolute inset-0 w-full h-full z-0">
+        <div class="swiper-wrapper">
+            
+            {% if propiedades %}
+                <!-- 🟢 CORRECCIÓN: Quitamos el slice porque la vista ya se encarga de limitar y optimizar la consulta -->
+                {% for propiedad in propiedades %}
+                <div class="swiper-slide relative w-full h-full bg-cover bg-center bg-no-repeat" 
+                     style="background-image: url('{% if propiedad.imagen_principal %}{{ propiedad.imagen_principal.url }}{% endif %}');">
+                    
+                    <div class="absolute inset-0 bg-black/40 pointer-events-none"></div>
+                    
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent pointer-events-none"></div>
+                    
+                    <div class="absolute bottom-6 left-4 md:bottom-12 md:left-12 lg:left-20 z-10 text-left flex flex-col items-start max-w-[calc(100%-2rem)] md:max-w-2xl">
+                        
+                        <!-- Categoría / Operación -->
+                        <p class="mb-0.5 text-[10px] sm:text-xs font-light tracking-[0.25em] uppercase text-[var(--gold,#D4AF37)] drop-shadow-md"
+                           style="font-family: 'Cormorant Garamond', serif;">
+                            {{ propiedad.get_tipo_operacion_display }}
+                        </p>
+                        
+                        <!-- Título Principal -->
+                        <h1 class="font-light leading-tight text-white mb-2 text-xl sm:text-2xl md:text-4xl lg:text-5xl drop-shadow-lg" 
+                            style="font-family: 'Cormorant Garamond', serif; letter-spacing: 0.01em;">
+                            {{ propiedad.titulo }}
+                        </h1>
+                        
+                        <!-- Píldora de Detalles -->
+                        <div class="text-neutral-300 mb-2.5 text-[10px] sm:text-xs tracking-widest font-light flex items-center flex-wrap gap-x-2 gap-y-0.5"
+                             style="font-family: 'Cormorant Garamond', serif;">
+                            <span class="whitespace-nowrap">📍 {{ propiedad.barrio_localidad }}</span>
+                            <span class="opacity-30">•</span>
+                            <span class="whitespace-nowrap">{{ propiedad.ambientes }} Ambientes</span>
+                            <span class="opacity-30">•</span>
+                            <span class="whitespace-nowrap">{{ propiedad.metros_totales }} m²</span>
+                        </div>
+                        
+                        <!-- Precio Formateado -->
+                        <div class="mb-3.5" style="font-family: 'Cormorant Garamond', serif;">
+                            <span class="inline-block text-xl sm:text-3xl font-light tracking-wide text-[var(--gold-light,#F3E5AB)] border-b border-[var(--gold,#D4AF37)] pb-0.5 pr-6 drop-shadow-md">
+                                {{ propiedad.precio_formateado }}
+                            </span>
+                        </div>
+                        
+                        <!-- Botón Ver Propiedad -->
+                        <a href="{% url 'propiedades:detalle' propiedad.id %}" 
+                           class="inline-block text-[9px] sm:text-xs uppercase tracking-[0.25em] text-white border border-white/30 px-6 py-3 md:px-8 md:py-3.5 transition-all duration-500 bg-white/5 backdrop-blur-sm hover:bg-white hover:text-black hover:border-white rounded-none group"
+                           style="font-family: 'Cormorant Garamond', serif;">
+                            Ver propiedad <span class="inline-block transition-transform duration-300 group-hover:translate-x-1 ml-1">→</span>
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <!-- Estado vacío controlado por el Administrador -->
+                <div class="swiper-slide relative w-full h-full flex items-center justify-center bg-[#080C14]">
+                    <div class="w-full max-w-4xl mx-auto text-center relative z-10 px-5">
+                        <h1 class="font-light text-neutral-400 text-base tracking-wide" style="font-family: 'Cormorant Garamond', serif;">
+                            No hay propiedades asignadas al catálogo principal.
+                        </h1>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Indicador de Paginación -->
+        <div class="swiper-pagination !bottom-6 !text-right px-6 sm:px-12 lg:px-16"></div>
+    </div>
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const heroSwiper = new Swiper('.heroSwiper', {
+            loop: true,
+            effect: 'fade',
+            fadeEffect: {
+                crossFade: true
+            },
+            autoplay: {
+                delay: 6000,
+                disableOnInteraction: false,
+            },
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
+            speed: 1000,
+        });
+    });
+</script>
+
+<style>
+    .swiper-pagination-bullet {
+        background: rgba(255, 255, 255, 0.5) !important;
+        opacity: 1;
+        width: 8px;
+        height: 8px;
+        transition: all 0.4s ease;
+    }
+    .swiper-pagination-bullet-active {
+        background: var(--gold, #D4AF37) !important;
+        width: 24px;
+        border-radius: 4px;
+    }
+</style>
+    <!-- Espaciador técnico para que la barra flotante no pise las estadísticas de abajo -->
+    <div class="h-12 bg-[var(--obsidian)]"></div>
+
+
+
+    <!-- 🟢 CORRECCIÓN: Cambiamos 'bg-fixed' por 'bg-scroll' para dejar la imagen estática. 
+     Añadimos un color de fondo negro por si la imagen tarda en cargar, y 'bg-cover bg-center' para que encuadre perfecto siempre. -->
+<!-- 🟢 CORRECCIÓN: Quitamos el fondo negro pesado y dejamos que la imagen brille con su luz original.
+     Mantenemos 'bg-scroll' para que no tire glitches ni se rompa al deslizar. -->
+<!-- 🟢 CORRECCIÓN: Usamos bg-local y forzamos de manera estricta el estilo de fondo para que la imagen quede fija en su lugar y no se desplace de fondo -->
+<!-- 🌟 SECCIÓN CON GRADIENTE LUXURY: Eliminamos la imagen de fondo y colocamos un degradado fluido de Negro a Dorado Metalizado y Negro -->
+<!-- 🟢 CORRECCIÓN: Reducimos los paddings (pt-36 pb-20) para que la sección sea más baja y estilizada -->
+<section class="hero-section relative pt-36 pb-20 px-5 sm:px-8 overflow-hidden bg-gradient-to-b from-[#0a0a0b] via-[#1a150e] to-[#0a0a0b]">
+        
+        <!-- Destello dorado de ambiente (recalibrado para la nueva altura) -->
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[280px] sm:w-[450px] h-[250px] bg-[#c9a84c]/10 rounded-full blur-[100px] pointer-events-none"></div>
+        
         <div class="max-w-4xl mx-auto text-center relative z-10">
-            <p class="section-eyebrow mb-5">Colección Privada · 2026</p>
-            <div class="gold-rule-center mb-6"></div>
-            <h1 class="font-display text-white mb-3" style="font-family:'Cormorant Garamond',serif; font-weight:300; font-size:clamp(2.4rem,6vw,4rem); line-height:1.1; letter-spacing:0.02em;">
-                Propiedades de<br><em style="font-style:italic; color: var(--gold-light);">Distinción Absoluta</em>
+            <!-- Ceja / Copete -->
+            <p class="section-eyebrow mb-4 text-[#c9a84c] text-xs tracking-[0.35em] uppercase font-medium" style="font-family: 'Jost', sans-serif;">
+                Colección Privada · 2026
+            </p>
+            
+            <div class="gold-rule-center mb-5 mx-auto h-[1px] w-16 bg-gradient-to-r from-transparent via-[#c9a84c] to-transparent"></div>
+            
+            <!-- Título Principal -->
+            <h1 class="font-display text-white mb-3 select-none" 
+                style="font-family:'Cormorant Garamond',serif; font-weight:300; font-size:clamp(2.4rem,6vw,4rem); line-height:1.15; letter-spacing:0.03em;">
+                Propiedades de<br><em style="font-style:italic; color: #F3E5AB; font-family:'Cormorant Garamond',serif;">Distinción Absoluta</em>
             </h1>
-            <p class="text-neutral-400 mt-5 mb-12 text-sm tracking-wide max-w-xl mx-auto" style="font-size:0.875rem; line-height:1.8; letter-spacing:0.04em;">
-                Seleccionamos los inmuebles más exclusivos. Cada detalle, negociado a su favor.
+            
+            <!-- Bajada de texto (Se achicó el margen inferior de mb-14 a mb-10) -->
+            <p class="text-neutral-400 mt-4 mb-10 text-sm tracking-widest max-w-xl mx-auto" 
+               style="font-size:0.85rem; line-height:1.8; letter-spacing:0.06em; font-family:'Jost',sans-serif;">
+                SELECCIONAMOS LOS INMUEBLES MÁS EXCLUSIVOS. CADA DETALLE, NEGOCIADO A SU FAVOR.
             </p>
 
+            <!-- Formulario del Buscador -->
             <form method="GET" action="{% url 'propiedades:catalogo' %}">
-                <div class="search-bar flex flex-col md:flex-row overflow-hidden shadow-2xl max-w-3xl mx-auto">
-                    <div class="flex-1 relative">
-                        <select name="operacion" class="search-select">
-                            <option value="">Operación</option>
-                            <option value="alquiler">En Alquiler</option>
-                            <option value="venta">En Venta</option>
-                            <option value="alquiler_temporal">Alquiler Temporal</option>
+                <div class="search-bar flex flex-col md:flex-row overflow-hidden shadow-2xl max-w-3xl mx-auto bg-[#0a0a0b]/90 backdrop-blur-md border border-[#c9a84c]/20 rounded-none">
+                    <div class="flex-1 relative border-b border-white/5 md:border-b-0 md:border-r border-white/10">
+                        <select name="operacion" class="search-select w-full bg-transparent text-white text-xs uppercase tracking-widest p-4 outline-none appearance-none cursor-pointer" style="font-family:'Jost',sans-serif;">
+                            <option value="" class="bg-[#0a0a0b]">Operación</option>
+                            <option value="alquiler" class="bg-[#0a0a0b]">En Alquiler</option>
+                            <option value="venta" class="bg-[#0a0a0b]">En Venta</option>
+                            <option value="alquiler_temporal" class="bg-[#0a0a0b]">Alquiler Temporal</option>
                         </select>
                     </div>
-                    <div class="flex-1 relative">
-                        <select name="tipo" class="search-select">
-                            <option value="">Tipo de Propiedad</option>
-                            <option value="casa">Casa</option>
-                            <option value="departamento">Departamento</option>
-                            <option value="monoambiente">Monoambiente</option>
-                            <option value="ph">PH</option>
-                            <option value="quinta">Quinta / Barrio Cerrado</option>
+                    <div class="flex-1 relative border-b border-white/5 md:border-b-0 md:border-r border-white/10">
+                        <select name="tipo" class="search-select w-full bg-transparent text-white text-xs uppercase tracking-widest p-4 outline-none appearance-none cursor-pointer" style="font-family:'Jost',sans-serif;">
+                            <option value="" class="bg-[#0a0a0b]">Tipo de Propiedad</option>
+                            <option value="casa" class="bg-[#0a0a0b]">Casa</option>
+                            <option value="departamento" class="bg-[#0a0a0b]">Departamento</option>
+                            <option value="monoambiente" class="bg-[#0a0a0b]">Monoambiente</option>
+                            <option value="ph" class="bg-[#0a0a0b]">PH</option>
+                            <option value="quinta" class="bg-[#0a0a0b]">Quinta / Barrio Cerrado</option>
                         </select>
                     </div>
                     <div class="flex-1">
-                        <input type="text" name="barrio" class="search-input" placeholder="Barrio o localidad…">
+                        <input type="text" name="barrio" class="search-input w-full bg-transparent text-white text-xs tracking-widest p-4 outline-none placeholder-neutral-600" placeholder="Barrio o localidad…" style="font-family:'Jost',sans-serif;">
                     </div>
-                    <button type="submit" class="search-btn">Buscar</button>
+                    <button type="submit" class="search-btn bg-[#c9a84c] hover:bg-white text-black font-semibold text-xs uppercase tracking-widest px-9 py-4 transition-colors duration-300 transform active:scale-[0.99]" style="font-family:'Jost',sans-serif;">
+                        Buscar
+                    </button>
                 </div>
             </form>
         </div>
-    </section>
+</section>
 
     <div class="stats-bar py-10 px-5 sm:px-8">
         <div class="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 text-center">

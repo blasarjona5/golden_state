@@ -41,7 +41,7 @@
         }
 
         .wsp-animado:hover {
-            animation-play-state: paused; /* Se frena la respiración al apoyar el mouse para mejor control */
+            animation-play-state: paused;
             transform: scale(1.1) !important;
             background-color: #128c7e !important;
         }
@@ -51,40 +51,67 @@
 </head>
 <body class="bg-[#0a0a0b]">
 
-    <header class="gs-header sticky top-0 z-50 w-full bg-[#0a0a0b]/90 backdrop-blur-md border-b border-white/5">
-        <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 h-[100px] flex items-center justify-between relative">
+    <!-- 🌟 BARRA DINÁMICA -->
+    {% if request.resolver_match.url_name == 'index' %}
+        <header id="main-header" class="fixed top-0 left-0 z-50 w-full bg-transparent border-b border-white/5 transition-all duration-500">
+    {% else %}
+        <header id="main-header" class="sticky top-0 z-50 w-full bg-[#0a0a0b]/90 backdrop-blur-md border-b border-white/5 transition-all duration-500">
+    {% endif %}
+        
+        <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 flex flex-row items-center justify-between relative py-4 lg:py-5 transition-all duration-500">
             
-            <a href="{% url 'propiedades:index' %}" class="flex items-center h-full select-none z-50 transition-transform duration-300 hover:scale-[1.01]">
-                <img src="{{ transform_url|default:'/media/logo.png' }}" 
-                    alt="Golden State Logo" 
-                    class="h-auto w-[110px] sm:w-[135px] lg:w-[170px] py-1 transform-gpu"
-                    style="transform-origin: left center; min-width: 110px;">
-            </a>
+            <!-- CONTENEDOR LOGO MAXI (Optimizado al extremo para formato cuadrado 500x500) -->
+            <div class="flex items-center justify-start md:w-[150px] lg:w-[220px] flex-shrink-0">
+                <a href="{% url 'propiedades:index' %}" class="flex items-center select-none z-50 transition-transform duration-300 hover:scale-[1.03]">
+                    <img src="{{ transform_url|default:'/media/logo.png' }}" 
+                        alt="Golden State Logo" 
+                        class="h-auto w-[95px] sm:w-[110px] md:w-full max-h-[95px] md:max-h-[120px] lg:max-h-[140px] p-0.5 transform-gpu object-contain transition-all duration-500"
+                        style="transform-origin: left center;">
+                </a>
+            </div>
             
-            <nav class="hidden md:flex items-center gap-4 sm:gap-6 md:gap-8">
-                <a href="{% url 'propiedades:catalogo' %}" class="text-xs uppercase tracking-widest text-neutral-400 hover:text-amber-400 transition font-medium" style="letter-spacing:0.18em; font-size:0.68rem;">Propiedades</a>
-                <a href="{% url 'propiedades:nosotros' %}" class="text-xs uppercase tracking-widest text-neutral-400 hover:text-amber-400 transition font-medium" style="letter-spacing:0.18em; font-size:0.68rem;">Nosotros</a>
-                <a href="{% url 'propiedades:contacto' %}" class="text-xs uppercase tracking-widest text-neutral-400 hover:text-amber-400 transition font-medium" style="letter-spacing:0.18em; font-size:0.68rem;">Contacto</a>
+            <!-- MENÚ DE NAVEGACIÓN: Centrado exacto, simétrico y limpio -->
+            <nav class="hidden md:flex items-center justify-center flex-grow gap-5 md:gap-7 lg:gap-10 px-4">
+                <a href="{% url 'propiedades:catalogo' %}" class="text-xs uppercase tracking-widest text-neutral-200 hover:text-amber-400 transition font-medium" style="letter-spacing:0.2em; font-size:0.7rem;">Propiedades</a>
+                <a href="{% url 'propiedades:nosotros' %}" class="text-xs uppercase tracking-widest text-neutral-200 hover:text-amber-400 transition font-medium" style="letter-spacing:0.2em; font-size:0.7rem;">Nosotros</a>
+                <a href="{% url 'propiedades:contacto' %}" class="text-xs uppercase tracking-widest text-neutral-200 hover:text-amber-400 transition font-medium" style="letter-spacing:0.2em; font-size:0.7rem;">Contacto</a>
+                
+                <!-- 🟢 BOTÓN EN COMPU: Agendar Visita de Alta Costura -->
+                <a href="{% url 'propiedades:contacto' %}" 
+                   class="ml-2 inline-block text-[10px] uppercase tracking-[0.2em] font-medium text-[#c9a84c] border border-[#c9a84c]/40 px-4 py-2 bg-white/5 backdrop-blur-sm transition-all duration-300 hover:bg-[#c9a84c] hover:text-black hover:border-[#c9a84c] rounded-none" 
+                   style="font-family: 'Jost', sans-serif;">
+                    Agendar Visita
+                </a>
             </nav>
 
-            <button id="menu-btn" class="flex md:hidden flex-col justify-between w-6 h-3.5 text-[#c9a84c] focus:outline-none z-[100] cursor-pointer select-none" aria-label="Abrir menú">
+            <!-- Botón de Menú Hamburguesa (Celular) -->
+            <button id="menu-btn" class="flex md:hidden flex-col justify-between w-6 h-3.5 text-[#c9a84c] focus:outline-none z-[100] cursor-pointer select-none self-center" aria-label="Abrir menú">
                 <span class="w-full h-[1.5px] bg-[#c9a84c] transition-all duration-300 origin-left pointer-events-none"></span>
                 <span class="w-full h-[1.5px] bg-[#c9a84c] transition-all duration-300 pointer-events-none"></span>
                 <span class="w-full h-[1.5px] bg-[#c9a84c] transition-all duration-300 origin-left pointer-events-none"></span>
             </button>
 
+            <!-- Menú Desplegable Móvil -->
             <div id="menu-dropdown" class="fixed top-0 right-0 h-screen w-[75vw] sm:w-[50vw] bg-[#0a0a0b] border-l border-white/5 flex flex-col gap-8 p-8 z-50 shadow-2xl transition-transform duration-300 translate-x-full md:hidden">
-                <div class="h-[100px]"></div> 
+                <div class="h-[130px]"></div> 
                 <a href="{% url 'propiedades:catalogo' %}" class="mobile-link text-sm uppercase tracking-widest text-neutral-400 hover:text-amber-400 transition font-medium" style="letter-spacing: 0.18em;">Propiedades</a>
                 <a href="{% url 'propiedades:nosotros' %}" class="mobile-link text-xs uppercase tracking-widest text-neutral-400 hover:text-amber-400 transition font-medium" style="letter-spacing: 0.18em;">Nosotros</a>
                 <a href="{% url 'propiedades:contacto' %}" class="mobile-link text-xs uppercase tracking-widest text-neutral-400 hover:text-amber-400 transition font-medium" style="letter-spacing: 0.18em;">Contacto</a>
+                
+                <!-- 🟢 BOTÓN EN MÓVIL: Perfectamente integrado al final del listado -->
+                <a href="{% url 'propiedades:contacto' %}" 
+                   class="mobile-link mt-4 text-center text-xs uppercase tracking-[0.2em] font-medium text-black bg-[#c9a84c] px-5 py-3.5 transition active:scale-[0.98] rounded-none"
+                   style="font-family: 'Jost', sans-serif;">
+                    Agendar Visita
+                </a>
             </div>
             
-            <div class="hidden lg:flex items-center gap-4">
-                <div class="w-10 h-[1px] bg-[#c9a84c]/60"></div>
-                <span class="text-neutral-400 uppercase tracking-[0.3em] font-medium select-none" 
+            <!-- DETALLE DERECHO: Ajustado en ancho para equilibrar el espacio -->
+            <div class="hidden lg:flex items-center justify-end lg:w-[220px] gap-4 flex-shrink-0">
+                <div class="w-8 h-[1px] bg-[#c9a84c]/60"></div>
+                <span class="text-neutral-300 uppercase tracking-[0.3em] font-medium select-none" 
                       style="font-size: 0.72rem; font-family: 'Jost', sans-serif;">
-                    Luxury Real Estate
+                    Luxury
                 </span>
             </div>
         </div>
@@ -98,8 +125,8 @@
     <footer class="py-16 px-5 sm:px-8 border-t border-white/5 bg-[#121214]">
         <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8">
             
-            <div class="flex items-center h-[45px] transition-transform duration-300 hover:scale-[1.02]">
-                <img src="/media/logo.png" alt="Golden State Logo" class="h-full w-auto object-contain max-h-[45px]">
+            <div class="flex items-center h-[55px] transition-transform duration-300 hover:scale-[1.02]">
+                <img src="/media/logo.png" alt="Golden State Logo" class="h-full w-auto object-contain max-h-[55px]">
             </div>
             
             <div class="flex flex-col gap-2 text-center md:text-right font-medium">
@@ -121,7 +148,7 @@
                 <div class="hidden md:block w-8 h-[1px] bg-[#c9a84c]/30 ml-2"></div>
             </div>
         </div>
-    </footer>
+    </footer >
 
     <a href="https://wa.me/5493874209690" 
        target="_blank" 
@@ -149,6 +176,33 @@
                 });
             });
         }
+
+        /* 🌟 SCROLL DINÁMICO OPTIMIZADO PARA LOGO CUADRADO MAXI */
+        window.addEventListener('scroll', function() {
+            if (window.location.pathname === '/') {
+                const header = document.getElementById('main-header');
+                const innerContainer = header.querySelector('div');
+                const logo = header.querySelector('img');
+                
+                if (window.scrollY > 40) { 
+                    header.classList.add('bg-[#0a0a0b]/95', 'backdrop-blur-md', 'shadow-lg');
+                    header.classList.remove('bg-transparent');
+                    innerContainer.classList.add('py-1.5'); 
+                    innerContainer.classList.remove('py-4', 'lg:py-5');
+                    
+                    logo.classList.add('md:max-h-[80px]', 'lg:max-h-[85px]');
+                    logo.classList.remove('md:max-h-[120px]', 'lg:max-h-[140px]');
+                } else {
+                    header.classList.add('bg-transparent');
+                    header.classList.remove('bg-[#0a0a0b]/95', 'backdrop-blur-md', 'shadow-lg');
+                    innerContainer.classList.add('py-4', 'lg:py-5'); 
+                    innerContainer.classList.remove('py-1.5');
+                    
+                    logo.classList.add('md:max-h-[120px]', 'lg:max-h-[140px]');
+                    logo.classList.remove('md:max-h-[80px]', 'lg:max-h-[85px]');
+                }
+            }
+        });
     </script>
     
     {% block extra_js %}

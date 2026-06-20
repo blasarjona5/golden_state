@@ -1,0 +1,206 @@
+{% extends 'propiedades/base.html' %}
+{% load static %}
+
+{% block title %}Servicios Corporativos | Golden State Luxury Real Estate{% endblock %}
+
+{% block extra_css %}
+<style>
+    .hover-luxury {
+        transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .hover-luxury:hover {
+        border-color: rgba(201, 168, 76, 0.3) !important;
+        background-color: rgba(201, 168, 76, 0.02) !important;
+    }
+    /* Filtro sutil para homogeneizar las imágenes de propiedades */
+    .property-img {
+        filter: grayscale(30%) contrast(110%);
+        transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .property-img:hover {
+        filter: grayscale(0%) contrast(100%);
+        transform: scale(1.03);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="bg-[#0a0a0b] text-neutral-200 font-['Jost'] antialiased">
+
+    <!-- 🌟 SECCIÓN 1: INTRODUCCIÓN CON TU FOTO CORPORATIVA -->
+    <section class="relative pt-32 pb-20 lg:pt-40 lg:pb-28 border-b border-white/5">
+        <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+                
+                <div class="lg:col-span-7 space-y-6 lg:space-y-8">
+                    <div class="w-12 h-[1px] bg-[#c9a84c]"></div>
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-light uppercase tracking-[0.15em] text-white font-['Cormorant_Garamond'] leading-none">
+                        Servicios <br><span class="text-[#c9a84c]">Exclusivos</span>
+                    </h1>
+                    <div class="w-12 h-[1px] bg-[#c9a84c]"></div>
+                    <p class="text-neutral-400 font-light text-base lg:text-lg leading-relaxed max-w-2xl">
+                        En <span class="text-white font-medium">Gold State Bienes Raíces</span>, redefinimos el concepto de consultoría inmobiliaria. Ofrecemos un servicio de gestión integral basado en el profesionalismo absoluto, la confidencialidad y un compromiso inquebrantable en cada etapa de su operación.
+                    </p>
+                </div>
+
+                <div class="lg:col-span-5 relative group">
+                    <div class="absolute -inset-1 bg-gradient-to-r from-[#c9a84c]/20 to-transparent rounded-none blur opacity-30 group-hover:opacity-50 transition duration-1000"></div>
+                    <div class="relative border border-white/10 bg-[#121214] p-3 shadow-2xl">
+                        <img src="/media/servicios.jpeg" 
+                             alt="Presentación Gold State" 
+                             class="w-full h-auto object-cover grayscale-[20%] hover:grayscale-0 transition-all duration-700">
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- 💎 SECCIÓN 2: BLOQUES EDITORIALES ASIMÉTRICOS CON IMÁGENES -->
+    <section class="py-20 lg:py-32 space-y-32 lg:space-y-48">
+        <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12">
+            
+            <!-- BLOQUE 1: Propiedades Premium (Imagen Izquierda, Texto Derecha) -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-center">
+                <div class="lg:col-span-6 overflow-hidden border border-white/5 bg-[#121214] p-2">
+                    <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&q=80" 
+                         alt="Mansión de Lujo" 
+                         class="property-img w-full h-[350px] md:h-[450px] object-cover">
+                </div>
+                <div class="lg:col-span-6 space-y-6">
+                    <span class="text-[10px] tracking-[0.3em] uppercase text-[#c9a84c] font-medium block">01 / Alta Gama</span>
+                    <h2 class="text-3xl lg:text-4xl font-light text-white font-['Cormorant_Garamond'] tracking-wide">Propiedades Premium</h2>
+                    <div class="w-8 h-[1px] bg-[#c9a84c]/50"></div>
+                    <p class="text-neutral-400 font-light text-base leading-relaxed">
+                        Especialistas en la comercialización de residencias exclusivas y propiedades de alta gama. Ofrecemos atención personalizada, marketing selectivo y acompañamiento profesional para compradores e inversores exigentes que buscan piezas arquitectónicas de autor y locaciones inigualables.
+                    </p>
+                </div>
+            </div>
+
+            <!-- BLOQUE 2: Venta & Alquileres (Enfoque de Texto Central Flanqueado por Foto de Detalles) -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center border-t border-b border-white/5 py-20">
+                <div class="lg:col-span-7 grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-14 order-2 lg:order-1">
+                    <div class="space-y-4">
+                        <span class="text-[10px] tracking-[0.3em] uppercase text-neutral-500 font-medium block">02 / Transacciones</span>
+                        <h3 class="text-xl font-light text-white font-['Cormorant_Garamond'] tracking-wide">Venta de Inmuebles</h3>
+                        <p class="text-neutral-400 font-light text-sm leading-relaxed">
+                            Brindamos asesoramiento integral para la comercialización de casas, departamentos y locales. Diseñamos estrategias de marketing personalizadas para lograr una venta rápida y al mejor valor posible del mercado.
+                        </p>
+                    </div>
+                    <div class="space-y-4">
+                        <span class="text-[10px] tracking-[0.3em] uppercase text-neutral-500 font-medium block">03 / Colocación</span>
+                        <h3 class="text-xl font-light text-white font-['Cormorant_Garamond'] tracking-wide">Alquileres</h3>
+                        <p class="text-neutral-400 font-light text-sm leading-relaxed">
+                            Gestionamos el proceso completo de alquiler, desde la promoción sofisticada de la propiedad y una rigurosa selección de inquilinos hasta la firma, garantizando tranquilidad absoluta a las partes.
+                        </p>
+                    </div>
+                </div>
+                <div class="lg:col-span-5 order-1 lg:order-2 overflow-hidden border border-white/5 bg-[#121214] p-2">
+                    <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=80" 
+                         alt="Interiorismo Residencial Premium" 
+                         class="property-img w-full h-[280px] md:h-[350px] object-cover">
+                </div>
+            </div>
+
+            <!-- BLOQUE 3: Desarrollos & Consultoría de Inversión (Texto Izquierda, Imagen Derecha) -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-center">
+                <div class="lg:col-span-6 space-y-6 order-2 lg:order-1 lg:text-right">
+                    <span class="text-[10px] tracking-[0.3em] uppercase text-[#c9a84c] font-medium block">04 / Negocios</span>
+                    <h2 class="text-3xl lg:text-4xl font-light text-white font-['Cormorant_Garamond'] tracking-wide">Desarrollos e Inversiones</h2>
+                    <div class="w-8 h-[1px] bg-[#c9a84c]/50 lg:ml-auto"></div>
+                    <p class="text-neutral-400 font-light text-base leading-relaxed">
+                        Acompañamos proyectos inmobiliarios desde su planificación estructural hasta su total posicionamiento comercial. Analizamos tendencias macroeconómicas, ubicaciones con alta proyección de crecimiento y métricas de rentabilidad para blindar el capital de nuestros inversores de escala.
+                    </p>
+                </div>
+                <div class="lg:col-span-6 order-1 lg:order-2 overflow-hidden border border-white/5 bg-[#121214] p-2">
+                    <img src="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1200&q=80" 
+                         alt="Desarrollo Urbano Edificio Moderno" 
+                         class="property-img w-full h-[350px] md:h-[450px] object-cover">
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- 🛠️ SECCIÓN 3: COMPLEMENTARIOS (LISTADO DE LINEAS FINAS PREMIUM) -->
+    <section class="py-20 lg:py-32 bg-[#121214]/20 border-t border-b border-white/5">
+        <div class="max-w-5xl mx-auto px-5 sm:px-8">
+            
+            <div class="text-center mb-16">
+                <span class="text-[10px] tracking-[0.3em] uppercase text-neutral-500 font-medium block mb-2">Ecosistema Global</span>
+                <h2 class="text-3xl font-light text-white font-['Cormorant_Garamond'] tracking-widest uppercase">Servicios de Gestión</h2>
+                <div class="w-12 h-[1px] bg-[#c9a84c]/40 mx-auto mt-4"></div>
+            </div>
+
+            <div class="divide-y divide-white/5">
+                
+                <!-- Ítem 05: Tasaciones -->
+                <div class="py-8 grid grid-cols-1 md:grid-cols-12 gap-4 hover-luxury px-4 transition-all duration-300">
+                    <div class="md:col-span-4 flex items-center">
+                        <span class="text-xs text-[#c9a84c] tracking-widest mr-4">05 /</span>
+                        <h4 class="text-lg font-light text-white tracking-wide">Tasaciones Profesionales</h4>
+                    </div>
+                    <div class="md:col-span-8">
+                        <p class="text-neutral-400 font-light text-sm leading-relaxed">
+                            Determinación precisa del valor real de mercado para activos residenciales, comerciales y terrenos, analizando minuciosamente su estado, localización y proyecciones de oferta.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Ítem 06: Administración -->
+                <div class="py-8 grid grid-cols-1 md:grid-cols-12 gap-4 hover-luxury px-4 transition-all duration-300">
+                    <div class="md:col-span-4 flex items-center">
+                        <span class="text-xs text-[#c9a84c] tracking-widest mr-4">06 /</span>
+                        <h4 class="text-lg font-light text-white tracking-wide">Administración de Alquileres</h4>
+                    </div>
+                    <div class="md:col-span-8">
+                        <p class="text-neutral-400 font-light text-sm leading-relaxed">
+                            Gestión total corporativa: cobros centralizados, seguimiento estricto de pagos, renovaciones contractuales, coordinación de mantenimientos y resguardo patrimonial.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Ítem 07: Terrenos -->
+                <div class="py-8 grid grid-cols-1 md:grid-cols-12 gap-4 hover-luxury px-4 transition-all duration-300">
+                    <div class="md:col-span-4 flex items-center">
+                        <span class="text-xs text-[#c9a84c] tracking-widest mr-4">07 /</span>
+                        <h4 class="text-lg font-light text-white tracking-wide">Comercialización de Terrenos</h4>
+                    </div>
+                    <div class="md:col-span-8">
+                        <p class="text-neutral-400 font-light text-sm leading-relaxed">
+                            Evaluación de potencialidades en parcelas urbanas y suburbanas, articulando la ingeniería comercial ideal para captar desarrolladores de primera línea.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Ítem 08: Gestión Integral -->
+                <div class="py-8 grid grid-cols-1 md:grid-cols-12 gap-4 hover-luxury px-4 transition-all duration-300">
+                    <div class="md:col-span-4 flex items-center">
+                        <span class="text-xs text-[#c9a84c] tracking-widest mr-4">08 /</span>
+                        <h4 class="text-lg font-light text-white tracking-wide">Gestión Integral Inmobiliaria</h4>
+                    </div>
+                    <div class="md:col-span-8">
+                        <p class="text-neutral-400 font-light text-sm leading-relaxed">
+                            Un ecosistema completo basado en transparencia y sofisticación operativa, asegurando un acompañamiento pulcro en cada hito contractual.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- 🌟 SECCIÓN 4: CIERRE INSTITUCIONAL -->
+    <section class="py-24 lg:py-32">
+        <div class="max-w-4xl mx-auto text-center px-5">
+            <h2 class="text-2xl sm:text-3xl font-light text-white font-['Cormorant_Garamond'] tracking-wide italic mb-4">
+                "Más que espacios, creamos experiencias de vida."
+            </h2>
+            <p class="text-[#c9a84c] uppercase tracking-[0.25em] text-xs font-medium">
+                Gold State Bienes Raíces
+            </p>
+        </div>
+    </section>
+
+</div>
+{% endblock %}

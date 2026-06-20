@@ -75,6 +75,8 @@
             <nav class="hidden md:flex items-center justify-center flex-grow gap-5 md:gap-7 lg:gap-10 px-4">
                 <a href="{% url 'propiedades:catalogo' %}" class="text-xs uppercase tracking-widest text-neutral-200 hover:text-amber-400 transition font-medium" style="letter-spacing:0.2em; font-size:0.7rem;">Propiedades</a>
                 <a href="{% url 'propiedades:nosotros' %}" class="text-xs uppercase tracking-widest text-neutral-200 hover:text-amber-400 transition font-medium" style="letter-spacing:0.2em; font-size:0.7rem;">Nosotros</a>
+                <!-- 👑 PESTAÑA SERVICIOS AGREGADA EN COMPU -->
+                <a href="{% url 'propiedades:servicios' %}" class="text-xs uppercase tracking-widest text-neutral-200 hover:text-amber-400 transition font-medium" style="letter-spacing:0.2em; font-size:0.7rem;">Servicios</a>
                 <a href="{% url 'propiedades:contacto' %}" class="text-xs uppercase tracking-widest text-neutral-200 hover:text-amber-400 transition font-medium" style="letter-spacing:0.2em; font-size:0.7rem;">Contacto</a>
                 
                 <!-- 🟢 BOTÓN EN COMPU: Agendar Visita de Alta Costura -->
@@ -97,6 +99,8 @@
                 <div class="h-[130px]"></div> 
                 <a href="{% url 'propiedades:catalogo' %}" class="mobile-link text-sm uppercase tracking-widest text-neutral-400 hover:text-amber-400 transition font-medium" style="letter-spacing: 0.18em;">Propiedades</a>
                 <a href="{% url 'propiedades:nosotros' %}" class="mobile-link text-xs uppercase tracking-widest text-neutral-400 hover:text-amber-400 transition font-medium" style="letter-spacing: 0.18em;">Nosotros</a>
+                <!-- 👑 PESTAÑA SERVICIOS AGREGADA EN CELULAR -->
+                <a href="{% url 'propiedades:servicios' %}" class="mobile-link text-xs uppercase tracking-widest text-neutral-400 hover:text-amber-400 transition font-medium" style="letter-spacing: 0.18em;">Servicios</a>
                 <a href="{% url 'propiedades:contacto' %}" class="mobile-link text-xs uppercase tracking-widest text-neutral-400 hover:text-amber-400 transition font-medium" style="letter-spacing: 0.18em;">Contacto</a>
                 
                 <!-- 🟢 BOTÓN EN MÓVIL: Perfectamente integrado al final del listado -->
@@ -156,7 +160,7 @@
                 <div class="hidden md:block w-8 h-[1px] bg-[#c9a84c]/30 ml-2"></div>
             </div>
         </div>
-    </footer >
+    </footer>
 
     <a href="https://wa.me/5493874209690" 
        target="_blank" 

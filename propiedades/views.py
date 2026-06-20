@@ -92,3 +92,7 @@ def nosotros(request):
         'staff': staff,  # Pasamos la lista de agentes al template
     }
     return render(request, 'propiedades/nosotros.html', context)
+
+def servicios_view(request):
+    # 👇 CAMBIADO: Ahora apunta a la subcarpeta correcta
+    return render(request, 'propiedades/servicios.html')
